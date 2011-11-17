@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:orientation="vertical"
+   android:layout_width="fill_parent"
+   android:layout_height="fill_parent"
+   >
+
+<FrameLayout 
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+    android:layout_weight="1"
+>
+<LinearLayout 
+	android:orientation="horizontal"
+   android:layout_width="fill_parent"
+   android:layout_height="fill_parent"	
+    android:layout_weight="1"
+>
+
+       <FrameLayout 
+       android:id="@+id/frame"
+       android:layout_width="wrap_content"
+       android:layout_height="match_parent"
+       android:layout_weight="1"
+       >       
+       		 <WebView android:id="@+id/review"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             >             
+    		</WebView>
+       </FrameLayout>
+
+       <SurfaceView
+       android:id="@+id/camera"
+       android:layout_width="wrap_content"
+       android:layout_height="fill_parent"
+       >
+       </SurfaceView>
+       
+</LinearLayout>
+</FrameLayout>
+
+<LinearLayout
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content"
+       android:orientation="horizontal"
+   	   android:gravity="bottom"
+       >
+    
+	   <Button
+       android:id="@+id/mask_btn"
+       android:background="@drawable/my_button"
+       android:layout_height="fill_parent"
+       android:layout_width="wrap_content"
+       android:text="@string/sc_mask"
+       android:textColor="#ffffff"
+       >
+       </Button>
+       
+	   <LinearLayout
+    	android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+       >
+       <com.yicha.android.ads.AdVision
+		android:id="@+id/advision"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		/>
+       </LinearLayout>
+       
+       <TextView
+       android:id="@+id/text1"
+       android:layout_height="wrap_content"
+       android:layout_width="wrap_content"
+       android:gravity="center"
+       android:text="" >
+       </TextView>
+	   <Button
+       android:id="@+id/button1"
+       android:background="@drawable/my_button"
+       android:layout_height="fill_parent"
+       android:layout_width="wrap_content"
+       android:layout_gravity="right"
+       android:text="@string/sc_start"
+       android:textColor="#ffffff"
+       >
+       </Button>
+</LinearLayout>
+</LinearLayout>
