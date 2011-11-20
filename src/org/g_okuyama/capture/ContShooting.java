@@ -468,12 +468,6 @@ public class ContShooting extends Activity {
     	if(AdMaker != null){
         	AdMaker.stop();
     	}
-
-    	/*
-    	if(mAdVision != null){
-    		mAdVision.stopAllTask();
-    	}
-    	*/
     }
     
     protected void onDestroy(){
@@ -485,13 +479,6 @@ public class ContShooting extends Activity {
         	AdMaker = null;
     	}
     	
-    	/*
-    	if(mAdVision != null){
-    		mAdVision.release();
-    		mAdVision = null;
-    	}
-    	*/
-    	
     	if(mPreview != null){
     	    mPreview.release();
     	}
@@ -501,13 +488,6 @@ public class ContShooting extends Activity {
     	//Log.d(TAG, "enter ContShooting#onRestart");
 
     	super.onRestart();
-
-    	/*
-		if(mAdVision != null){
-			mAdVision.setVisibility(AdVision.GONE);
-			mAdVision.stopAllTask();
-		}
-    	 */
 
 		if(AdMaker != null){
     		AdMaker.start();
