@@ -207,6 +207,7 @@ public class ContShooting extends Activity {
         AdMaker.start();
         */
         
+        /*
         mAdVision  = (AdVision)findViewById(R.id.advision);
         mAdVision.setAdVisionListener(new AdVisionListener(){
             public void onNoReceiveAd(String arg0) {
@@ -218,6 +219,7 @@ public class ContShooting extends Activity {
             }
         });
         mAdVision.AdStart("20000000623");
+        */
         
 		/*
         ImageButton plus = (ImageButton)findViewById(R.id.plus);

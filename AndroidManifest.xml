@@ -14,6 +14,7 @@
         </activity>
         
         <activity android:name=".ContShootingPreference"></activity>
+        <meta-data android:name="i-mobile_Publisher_ID" android:value="8076" />
     </application>
 
     <uses-permission android:name="android.permission.CAMERA" />
