@@ -11,6 +11,9 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <data android:scheme="http" android:host="org.g_okuyama.capture"/>
+            </intent-filter>
         </activity>
         
         <activity android:name=".ContShootingPreference"></activity>
