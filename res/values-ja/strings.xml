@@ -15,7 +15,11 @@
     <string name="sc_alert_sd">SDカードが利用できません</string>
     <string name="sc_alert_ok">確認（アプリ終了）</string>
 
-	<string name="category_shooting">連写設定</string>
+    <string name="sc_error_title">エラー</string>
+    <string name="sc_error_cam">カメラが起動できません</string>
+    <string name="sc_error_cam_ok">確認（アプリ終了）</string>
+
+    <string name="category_shooting">連写設定</string>
 	<string name="category_effect">エフェクト設定</string>
 
 	<string name="color_effect">color_effect</string>

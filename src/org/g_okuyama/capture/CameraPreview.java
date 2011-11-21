@@ -16,13 +16,17 @@ package org.g_okuyama.capture;
  * limitations under the License.
  */
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.Size;
 
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore.Images;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -39,6 +43,7 @@ import java.util.List;
 class CameraPreview implements SurfaceHolder.Callback {
     public static final String TAG = "ContShooting";
     Camera mCamera = null;
+    Context mContext = null;
     /*
     AutoFocusCallback mFocus = null;
     private boolean mFocusFlag = false;
@@ -72,22 +77,46 @@ class CameraPreview implements SurfaceHolder.Callback {
 	//画面サイズ
 	int mWidth = 0;
 	int mHeight = 0;
+		
+    CameraPreview(Context context){
+        mContext = context;
+	}
 	
-	CameraPreview(String effect, String scene, String white, String size, int width, int height){
-		mEffect = effect;
-		mScene = scene;
-		mWhite = white;
-		//mPicIdx = size;
-		mSizeStr = size;
-		mWidth = width;
-		mHeight = height;
+	public void setField(String effect, String scene, String white, String size, int width, int height){
+        mEffect = effect;
+        mScene = scene;
+        mWhite = white;
+        //mPicIdx = size;
+        mSizeStr = size;
+        mWidth = width;
+        mHeight = height;
 	}
     
     public void surfaceCreated(SurfaceHolder holder) {
     	//Log.d(TAG, "enter CameraPreview#surfaceCreated");
 
     	if(mCamera == null){
-    		mCamera = Camera.open();
+    	    try{
+                mCamera = Camera.open();
+    	        
+    	    }catch(RuntimeException e){
+    	        new AlertDialog.Builder(mContext)
+    	        .setTitle(R.string.sc_error_title)
+    	        .setMessage(mContext.getString(R.string.sc_error_cam))
+    	        .setPositiveButton(R.string.sc_error_cam_ok, new DialogInterface.OnClickListener() {
+    	            public void onClick(DialogInterface dialog, int which) {
+    	                System.exit(0);
+    	            }
+    	        })
+    	        .show();
+    	            
+    	        try {
+    	            this.finalize();
+    	        } catch (Throwable t) {
+    	            System.exit(0);                 
+    	        }
+    	        return;
+    	    }
     	}
     	
     	if(mSupportList == null){
@@ -155,6 +184,11 @@ class CameraPreview implements SurfaceHolder.Callback {
 
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
         //Log.d(TAG, "enter CameraPreview#surfaceChanged");
+        
+        //Cameraがopen()できなかったとき用
+        if(mCamera == null){
+            return;
+        }
 
         //止めないでsetParameters()するとエラーとなる場合があるため止める
         mCamera.stopPreview();
@@ -272,7 +306,7 @@ class CameraPreview implements SurfaceHolder.Callback {
     	//}
     		
     		//ボタン表示を「停止」に変更する
-    		ContShooting.displayStop();
+    		((ContShooting)mContext).displayStop();
     }
     
     public void stopPreview(){
@@ -281,7 +315,7 @@ class CameraPreview implements SurfaceHolder.Callback {
     	mCamera.stopPreview();
         mCamera.setPreviewCallback(null);
 		//ボタン表示を「開始」に変更する
-		ContShooting.displayStart();
+		((ContShooting)mContext).displayStart();
         mNum = 0;
 		//プレビューだけ開始する(画像保存はしない(setPreviewCallbackを呼ばない))
         mCamera.startPreview();
@@ -403,13 +437,13 @@ class CameraPreview implements SurfaceHolder.Callback {
             mCamera = null;
         }
         
-        ContShooting.mMode = 0;
-        ContShooting.displayStart();
+        ((ContShooting)mContext).setMode(0);
+        ((ContShooting)mContext).displayStart();
         
         mNum=0;
         //mSupportList = null;
     }
-    
+
     class PreviewComparator implements java.util.Comparator {
     	public int compare(Object s, Object t) {
     		//降順
@@ -426,7 +460,7 @@ class CameraPreview implements SurfaceHolder.Callback {
         }
 
         public void onPreviewFrame(byte[] data, Camera camera) {
-        	Log.d(TAG, "enter CameraPreview#onPreviewFrame");
+        	//Log.d(TAG, "enter CameraPreview#onPreviewFrame");
             //Log.d(TAG, "data.length = " + data.length);
         	
             //一旦コールバックを止める
@@ -525,14 +559,14 @@ class CameraPreview implements SurfaceHolder.Callback {
 			//values.put(Images.Media.LATITUDE,0.0);
 			//values.put(Images.Media.LONGITUDE,0.0);
 			//values.put(Images.Media.ORIENTATION,"");
-			ContShooting.saveGallery(values);
+			((ContShooting)mContext).saveGallery(values);
 
-			ContShooting.count();
+			((ContShooting)mContext).count();
 			mNum++;
 			if(mMax!=0){
 			    if(mNum >= mMax){
 			        mPreview.stopPreview();
-			        ContShooting.mMode = 0;
+			        ((ContShooting)mContext).setMode(0);
 			    }
 			}
         } 

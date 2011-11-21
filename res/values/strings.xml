@@ -15,6 +15,10 @@
     <string name="sc_alert_sd">Please insert a SD card.</string>
     <string name="sc_alert_ok">OK</string>
     
+    <string name="sc_error_title">Error</string>
+    <string name="sc_error_cam">Coundn\'t launch camera</string>
+    <string name="sc_error_cam_ok">OK</string>
+
     <string name="category_shooting">Continuous shooting settings</string>
 	<string name="category_effect">Effect settings</string>
     

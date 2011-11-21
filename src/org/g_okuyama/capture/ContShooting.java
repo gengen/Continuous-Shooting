@@ -54,18 +54,18 @@ public class ContShooting extends Activity {
     static final int RESPONSE_SHOOT_NUM = 5;
 
     SurfaceHolder mHolder;
-    private static int mCount = 0;
-    private static TextView mText;
+    private int mCount = 0;
+    private TextView mText;
     private CameraPreview mPreview = null;
-    public static int mMode = 0;
+    private int mMode = 0;
     private boolean mMaskFlag = false;
     
-    static Button sButton = null;
-    static Button sMaskButton = null;
-    static String sNum = null;
-    static ContentResolver sResolver;
-    static final int MENU_DISP_GALLERY = 1;
-    static final int MENU_DISP_SETTING = 2;
+    private Button mButton = null;
+    private Button mMaskButton = null;
+    private String mNum = null;
+    private ContentResolver mResolver;
+    private final int MENU_DISP_GALLERY = 1;
+    private final int MENU_DISP_SETTING = 2;
     
 	//for admaker
 	private libAdMaker AdMaker = null;
@@ -78,8 +78,8 @@ public class ContShooting extends Activity {
     	//Log.d(TAG, "enter ContShooting#onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        sNum = getString(R.string.sc_number);
-        sResolver = getContentResolver();
+        mNum = getString(R.string.sc_number);
+        mResolver = getContentResolver();
         
         //ê›íËílÇÃéÊìæ
         String effect = ContShootingPreference.getCurrentEffect(this);
@@ -100,12 +100,13 @@ public class ContShooting extends Activity {
         SurfaceView sv = (SurfaceView)findViewById(R.id.camera);
         mHolder = sv.getHolder();
 
-        mPreview = new CameraPreview(effect, scene, white, size, width, height);
+        mPreview = new CameraPreview(this);
+        mPreview.setField(effect, scene, white, size, width, height);
         mHolder.addCallback(mPreview);
         mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
         mText = (TextView)findViewById(R.id.text1);
-    	mText.setText(sNum + System.getProperty("line.separator") + "0");
+    	mText.setText(mNum + System.getProperty("line.separator") + "0");
 
     	//òAé ñáêîê›íË
         String num = ContShootingPreference.getCurrentShootNum(this);
@@ -118,8 +119,8 @@ public class ContShooting extends Activity {
     }
     
     private void setListener(){
-        sButton = (Button)findViewById(R.id.button1);
-        sButton.setOnClickListener(new OnClickListener(){
+        mButton = (Button)findViewById(R.id.button1);
+        mButton.setOnClickListener(new OnClickListener(){
 			public void onClick(View v) {
 				if(mPreview != null){
 					if(mMode == 0){
@@ -134,8 +135,8 @@ public class ContShooting extends Activity {
 			}
         });
         
-        sMaskButton = (Button)findViewById(R.id.mask_btn);
-        sMaskButton.setOnClickListener(new OnClickListener(){
+        mMaskButton = (Button)findViewById(R.id.mask_btn);
+        mMaskButton.setOnClickListener(new OnClickListener(){
 			public void onClick(View v) {
 				if(mPreview != null){
                     if(mMaskFlag){
@@ -431,38 +432,42 @@ public class ContShooting extends Activity {
         }
     }
     
-    static void count(){
-    	mText.setText(sNum + System.getProperty("line.separator") + Integer.toString(++mCount));
+    public void count(){
+    	mText.setText(mNum + System.getProperty("line.separator") + Integer.toString(++mCount));
     }
     
-    static void displayStart(){
+    public void displayStart(){
     	//sButton.setCompoundDrawablesWithIntrinsicBounds(android.R.drawable.ic_menu_camera, 0, 0, 0);
-    	sButton.setTextColor(0xffffffff);
-    	sButton.setText(R.string.sc_start);
+    	mButton.setTextColor(0xffffffff);
+    	mButton.setText(R.string.sc_start);
     }
     
-    static void displayStop(){
+    public void displayStop(){
     	//sButton.setCompoundDrawablesWithIntrinsicBounds(android.R.drawable.ic_menu_close_clear_cancel, 0, 0, 0);
-    	sButton.setTextColor(0xffffffff);
-    	sButton.setText(R.string.sc_stop);
+    	mButton.setTextColor(0xffffffff);
+    	mButton.setText(R.string.sc_stop);
     }
     
     void displayHideMode(){
-        sMaskButton.setTextColor(0xffffffff);
-        sMaskButton.setText(R.string.sc_back);
+        mMaskButton.setTextColor(0xffffffff);
+        mMaskButton.setText(R.string.sc_back);
     }
     
     void displayNormalMode(){
-        sMaskButton.setTextColor(0xffffffff);
-        sMaskButton.setText(R.string.sc_mask);        
+        mMaskButton.setTextColor(0xffffffff);
+        mMaskButton.setText(R.string.sc_mask);        
     }
     
-    static void saveGallery(ContentValues values){
-		sResolver.insert(Media.EXTERNAL_CONTENT_URI, values);
+    public void saveGallery(ContentValues values){
+		mResolver.insert(Media.EXTERNAL_CONTENT_URI, values);
+    }
+    
+    public void setMode(int mode){
+        mMode = mode;
     }
     
     protected void onPause(){
-    	//Log.d(TAG, "enter ContShooting#onPause");
+        //Log.d(TAG, "enter ContShooting#onPause");
     	
     	super.onPause();
     	if(AdMaker != null){
@@ -471,7 +476,7 @@ public class ContShooting extends Activity {
     }
     
     protected void onDestroy(){
-    	//Log.d(TAG, "enter ContShooting#onDestroy");
+        Log.d(TAG, "enter ContShooting#onDestroy");
 
     	super.onDestroy();
     	if(AdMaker != null){
@@ -495,6 +500,7 @@ public class ContShooting extends Activity {
     }
     
     public void finish(){
+        Log.d(TAG, "enter ContShooting#finish");
     	/*
     	new AlertDialog.Builder(this)
     	.setTitle(R.string.pi_finish)
