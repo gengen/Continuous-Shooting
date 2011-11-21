@@ -426,8 +426,11 @@ class CameraPreview implements SurfaceHolder.Callback {
         }
 
         public void onPreviewFrame(byte[] data, Camera camera) {
-        	//Log.d(TAG, "enter CameraPreview#onPreviewFrame");
+        	Log.d(TAG, "enter CameraPreview#onPreviewFrame");
             //Log.d(TAG, "data.length = " + data.length);
+        	
+            //一旦コールバックを止める
+        	camera.setPreviewCallback(null);
 
             //convert to "real" preview size. not size setting before.
             Size size = convertPreviewSize(data);
@@ -457,6 +460,9 @@ class CameraPreview implements SurfaceHolder.Callback {
             	camera.autoFocus(mFocus);
             }
             */
+            
+            //コールバックを再開
+            camera.setPreviewCallback(mPreviewCallback);
        }
         
         private Size convertPreviewSize(byte[] data){
