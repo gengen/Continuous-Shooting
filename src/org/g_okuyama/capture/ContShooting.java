@@ -476,7 +476,7 @@ public class ContShooting extends Activity {
     }
     
     protected void onDestroy(){
-        Log.d(TAG, "enter ContShooting#onDestroy");
+        //Log.d(TAG, "enter ContShooting#onDestroy");
 
     	super.onDestroy();
     	if(AdMaker != null){
@@ -500,7 +500,7 @@ public class ContShooting extends Activity {
     }
     
     public void finish(){
-        Log.d(TAG, "enter ContShooting#finish");
+        //Log.d(TAG, "enter ContShooting#finish");
     	/*
     	new AlertDialog.Builder(this)
     	.setTitle(R.string.pi_finish)
