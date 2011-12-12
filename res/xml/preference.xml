@@ -20,7 +20,19 @@
 			android:defaultValue="0" 
 			>
 		</ListPreference>
-      </PreferenceCategory>
+  
+    	<ListPreference 
+    		android:key="@string/interval"
+			android:title="@string/interval_title"   
+    		android:dialogTitle="@string/dialog_interval_title"
+			android:summary="@string/interval_summary"
+			android:entries="@array/int_entries"
+			android:entryValues="@array/int_entryvalues"
+			android:defaultValue="0" 
+			>
+		</ListPreference>
+
+   	</PreferenceCategory>
   
       <PreferenceCategory android:title="@string/category_effect">
     	<ListPreference 

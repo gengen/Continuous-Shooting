@@ -15,12 +15,14 @@ public class ContShootingPreference extends PreferenceActivity implements OnPref
     public static final String TAG = "ContShooting";
 
     public static final String DEFAULT_SHOOT_NUM = "0";
+    public static final String DEFAULT_INTERVAL = "0";
     
     static final int COLOR_EFFECT = 1;
     static final int SCENE_MODE = 2;
     static final int WHITE_BALANCE = 3;
     static final int PICTURE_SIZE = 4;
     static final int SHOOT_NUM = 5;
+    static final int INTERVAL = 6;
     static String[] sSizeList = null;
     
     @Override
@@ -111,7 +113,18 @@ public class ContShootingPreference extends PreferenceActivity implements OnPref
         else{
             shootPref.setSummary(str);
         }
-    }
+
+        //˜AŽÊŠÔŠu
+        ListPreference intPref = (ListPreference)this.findPreference("interval");
+        intPref.setOnPreferenceChangeListener(this);
+        String intStr = getCurrentInterval(this);
+        if(intStr.equals("0")){
+            shootPref.setSummary((CharSequence)getString(R.string.interval_not_set));
+        }
+        else{
+            shootPref.setSummary(intStr);
+        }
+}
     
     public static String getCurrentEffect(Context c){
         return PreferenceManager.getDefaultSharedPreferences(c)
@@ -151,6 +164,11 @@ public class ContShootingPreference extends PreferenceActivity implements OnPref
     public static String getCurrentShootNum(Context c){
         return PreferenceManager.getDefaultSharedPreferences(c)
                 .getString("shoot_num", /*default*/DEFAULT_SHOOT_NUM);
+    }
+
+    public static String getCurrentInterval(Context c){
+        return PreferenceManager.getDefaultSharedPreferences(c)
+                .getString("interval", /*default*/DEFAULT_INTERVAL);
     }
 
 	public boolean onPreferenceChange(Preference pref, Object newValue) {
@@ -197,6 +215,12 @@ public class ContShootingPreference extends PreferenceActivity implements OnPref
             Intent intent = new Intent();
             intent.putExtra("shoot", Integer.valueOf((String)value));
             this.setResult(SHOOT_NUM, intent);
+            finish();
+        }
+        else if(pref.getKey().equals("interval")){
+            Intent intent = new Intent();
+            intent.putExtra("interval", Integer.valueOf((String)value));
+            this.setResult(INTERVAL, intent);
             finish();
         }
 		

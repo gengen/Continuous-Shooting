@@ -52,12 +52,14 @@ public class ContShooting extends Activity {
     static final int RESPONSE_WHITE_BALANCE = 3;
     static final int RESPONSE_PICTURE_SIZE = 4;
     static final int RESPONSE_SHOOT_NUM = 5;
+    static final int RESPONSE_INTERVAL = 6;
 
     SurfaceHolder mHolder;
     private int mCount = 0;
     private TextView mText;
     private CameraPreview mPreview = null;
-    private int mMode = 0;
+    //éBâeíÜÇ©î€Ç©Åi0:í‚é~íÜÅA1ÅFéBâeíÜÅj
+    public int mMode = 0;
     private boolean mMaskFlag = false;
     
     private Button mButton = null;
@@ -111,7 +113,13 @@ public class ContShooting extends Activity {
     	//òAé ñáêîê›íË
         String num = ContShootingPreference.getCurrentShootNum(this);
         if(!num.equals("0")){
-            mPreview.setShootNum(Integer.valueOf((String)num));
+            mPreview.setShootNum(Integer.valueOf(num));
+        }
+        
+        //òAé ä‘äuê›íË
+        String interval = ContShootingPreference.getCurrentInterval(this);
+        if(!interval.equals("0")){
+            mPreview.setInterval(Integer.valueOf(interval));
         }
 
         //register UI Listener

@@ -47,5 +47,10 @@
 	<string name="dialog_shoot_num_title">Shooting number</string>
 	<string name="shoot_num_summary">Set shooting number</string>
     <string name="shoot_num_unlimited">Unlimited</string>
-    	
+	
+	<string name="interval">interval</string>
+	<string name="interval_title">Interval</string>
+	<string name="dialog_interval_title">Interval</string>
+	<string name="interval_summary">Set shooting interval</string>
+	<string name="interval_not_set">No setting</string>
 </resources>

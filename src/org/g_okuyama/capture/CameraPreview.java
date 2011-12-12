@@ -74,6 +74,9 @@ class CameraPreview implements SurfaceHolder.Callback {
 	//現在の撮影数
 	private int mNum = 0;
 	
+	//連写間隔
+	private int mInterval = 0;
+	
 	//画面サイズ
 	int mWidth = 0;
 	int mHeight = 0;
@@ -429,6 +432,10 @@ class CameraPreview implements SurfaceHolder.Callback {
         mMax = num;
     }
     
+    void setInterval(int interval){
+        mInterval = interval;
+    }
+    
     void release(){
         if(mCamera != null){
             mCamera.setPreviewCallback(null);
@@ -466,17 +473,34 @@ class CameraPreview implements SurfaceHolder.Callback {
             //一旦コールバックを止める
         	camera.setPreviewCallback(null);
 
+        	//撮影間隔設定用のタイマ
+            if(mInterval != 0){
+                Thread t2 = new Thread(){
+                    public void run(){
+                        try {
+                            Thread.sleep(mInterval * 1000);
+                        } catch (InterruptedException e) {
+                        }
+
+                        if(mCamera != null){
+                            //撮影中のときはコールバックを再開。停止時は再開しない
+                            if(((ContShooting)mContext).mMode == 1){
+                                mCamera.setPreviewCallback(mPreviewCallback);                                   
+                            }
+                        }
+                    }
+                };
+                t2.start();
+            }
+
+            ((ContShooting)mContext).count();
+
             //convert to "real" preview size. not size setting before.
             Size size = convertPreviewSize(data);
 
             final int width = size.width;
             final int height = size.height;            
             int[] rgb = new int[(width * height)];
-
-            /*
-            Log.d(TAG, "width = " + width);
-            Log.d(TAG, "height = " + height);
-            */  
 
             Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 
@@ -495,8 +519,18 @@ class CameraPreview implements SurfaceHolder.Callback {
             }
             */
             
-            //コールバックを再開
-            camera.setPreviewCallback(mPreviewCallback);
+            if(mInterval == 0){
+                //コールバックを再開
+                camera.setPreviewCallback(mPreviewCallback);                
+            }
+
+            mNum++;
+            if(mMax!=0){
+                if(mNum >= mMax){
+                    mPreview.stopPreview();
+                    ((ContShooting)mContext).setMode(0);
+                }
+            }
        }
         
         private Size convertPreviewSize(byte[] data){
@@ -561,6 +595,7 @@ class CameraPreview implements SurfaceHolder.Callback {
 			//values.put(Images.Media.ORIENTATION,"");
 			((ContShooting)mContext).saveGallery(values);
 
+			/*
 			((ContShooting)mContext).count();
 			mNum++;
 			if(mMax!=0){
@@ -569,6 +604,7 @@ class CameraPreview implements SurfaceHolder.Callback {
 			        ((ContShooting)mContext).setMode(0);
 			    }
 			}
+			*/
         } 
         
         // YUV420 to BMP 
