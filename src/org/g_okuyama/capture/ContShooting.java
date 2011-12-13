@@ -35,11 +35,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import jp.co.nobot.libAdMaker.libAdMaker;
-import jp.co.nobot.libAdMaker.AdMakerListener;
-
-import com.yicha.android.ads.AdVision;
-import com.yicha.android.ads.AdVisionListener;
+import com.ngigroup.adstir.AdstirView;
+import com.ngigroup.adstir.AdstirTerminate;
 
 public class ContShooting extends Activity {
     private static final String TAG = "ContShooting";
@@ -69,17 +66,20 @@ public class ContShooting extends Activity {
     private final int MENU_DISP_GALLERY = 1;
     private final int MENU_DISP_SETTING = 2;
     
-	//for admaker
-	private libAdMaker AdMaker = null;
-	//for advision
-	private AdVision mAdVision = null;
-	
+    private AdstirView mAdstirView;
+    
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	//Log.d(TAG, "enter ContShooting#onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        
+        //adstirê›íË
+        LinearLayout layout = (LinearLayout)findViewById(R.id.adspace);
+        mAdstirView = new AdstirView(this);
+        layout.addView(mAdstirView);
+        
         mNum = getString(R.string.sc_number);
         mResolver = getContentResolver();
         
@@ -437,6 +437,11 @@ public class ContShooting extends Activity {
                     mPreview.setShootNum(data.getIntExtra("shoot", 0));
                 }
             }
+            if(resultCode == RESPONSE_INTERVAL){
+                if(mPreview != null){
+                    mPreview.setInterval(data.getIntExtra("interval", 0));
+                }
+            }
         }
     }
     
@@ -475,23 +480,15 @@ public class ContShooting extends Activity {
     }
     
     protected void onPause(){
-        //Log.d(TAG, "enter ContShooting#onPause");
-    	
+        //Log.d(TAG, "enter ContShooting#onPause");    	
     	super.onPause();
-    	if(AdMaker != null){
-        	AdMaker.stop();
-    	}
+    	mAdstirView.stop();
     }
     
     protected void onDestroy(){
         //Log.d(TAG, "enter ContShooting#onDestroy");
-
     	super.onDestroy();
-    	if(AdMaker != null){
-    		AdMaker.destroy();
-        	AdMaker = null;
-    	}
-    	
+        new AdstirTerminate(this);
     	if(mPreview != null){
     	    mPreview.release();
     	}
@@ -499,12 +496,7 @@ public class ContShooting extends Activity {
     
     protected void onRestart(){
     	//Log.d(TAG, "enter ContShooting#onRestart");
-
     	super.onRestart();
-
-		if(AdMaker != null){
-    		AdMaker.start();
-    	}
     }
     
     public void finish(){

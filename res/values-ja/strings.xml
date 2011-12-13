@@ -47,11 +47,12 @@
 	<string name="dialog_shoot_num_title">連写枚数</string>
 	<string name="shoot_num_summary">連写枚数を設定する</string>
 	<string name="shoot_num_unlimited">指定無し</string>
-	
+	    	    	
 	<string name="interval">interval</string>
 	<string name="interval_title">連写間隔</string>
 	<string name="dialog_interval_title">連写間隔</string>
 	<string name="interval_summary">連写間隔を設定する</string>
 	<string name="interval_not_set">指定無し</string>
-	
+	<string name="str_sec">秒</string>
+	    	
 </resources>

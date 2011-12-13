@@ -53,4 +53,5 @@
 	<string name="dialog_interval_title">Interval</string>
 	<string name="interval_summary">Set shooting interval</string>
 	<string name="interval_not_set">No setting</string>
+    <string name="str_sec">sec.</string>
 </resources>

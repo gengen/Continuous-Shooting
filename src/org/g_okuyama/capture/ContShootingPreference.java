@@ -119,10 +119,10 @@ public class ContShootingPreference extends PreferenceActivity implements OnPref
         intPref.setOnPreferenceChangeListener(this);
         String intStr = getCurrentInterval(this);
         if(intStr.equals("0")){
-            shootPref.setSummary((CharSequence)getString(R.string.interval_not_set));
+            intPref.setSummary((CharSequence)getString(R.string.interval_not_set));
         }
         else{
-            shootPref.setSummary(intStr);
+            intPref.setSummary(intStr + " " + getString(R.string.str_sec));
         }
 }
     
