@@ -151,84 +151,20 @@ public class ContShooting extends Activity {
                         setTitle(R.string.app_name);
                     }
                     else{
-                        SurfaceView sv = (SurfaceView)findViewById(R.id.camera);
-                        sv.setLayoutParams(new LinearLayout.LayoutParams(54, 36));
-                        displayHideMode();
-                        mMaskFlag = true;
-                        setTitle(R.string.sc_hidden);
-                        
-                        WebView view = (WebView)findViewById(R.id.review);
-                        view.setWebViewClient(new WebViewClient());
-                        view.getSettings().setJavaScriptEnabled(true);
-                        view.getSettings().setBuiltInZoomControls(true);
-                        
-                        if(Locale.getDefault().equals(Locale.JAPAN)){
-                        	view.loadUrl(URL_JP);
-                        }
-                        else{
-                        	view.loadUrl(URL_OTHER);
-                        }
+                        setToHidden();
                     }
 				}
 			}
         });
         
+        if(ContShootingPreference.isHidden(this)){
+            setToHidden();
+        }
+        
         //adstirê›íË
         LinearLayout layout = (LinearLayout)findViewById(R.id.adspace);
         mAdstirView = new AdstirView(this);
         layout.addView(mAdstirView);
-        
-        /*
-        AdMaker = (libAdMaker)findViewById(R.id.admakerview);
-        AdMaker.siteId = "1401";
-        AdMaker.zoneId = "6127";
-        AdMaker.setUrl("http://images.ad-maker.info/apps/263ved0b78ef.html");
-        AdMaker.setBackgroundColor(Color.TRANSPARENT);
-        AdMaker.setAdMakerListener(new AdMakerListener(){
-			public void onFailedToReceiveAdMaker(String arg0) {
-				Log.d(TAG, "enter AdMaker#onFailedToReceiveAdMaker");
-				//AdMakerÇÃògÇè¡Ç∑
-				AdMaker.stop();
-				AdMaker.setVisibility(libAdMaker.GONE);
-				AdMaker = null;
-
-				//AdVisionï\é¶
-				Log.d(TAG, "AdVision start");
-                mAdVision  = (AdVision)findViewById(R.id.advision);
-                mAdVision.setVisibility(AdVision.VISIBLE);
-                mAdVision.setAdVisionListener(new AdVisionListener(){
-                    public void onNoReceiveAd(String arg0) {
-                        Log.d(TAG, "enter AdVision#onNoReceiveAd");
-                    }
-
-                    public void onReceiveAd() {
-                        Log.d(TAG, "enter AdVision#onReceiveAd");
-                    }
-                });
-                mAdVision.AdStart("20000000623");
-			}
-
-			public void onReceiveAdMaker() {
-				Log.d(TAG, "enter AdMaker#onReceiveAdMaker");
-				//nothing to do
-			}
-        });
-        AdMaker.start();
-        */
-        
-        /*
-        mAdVision  = (AdVision)findViewById(R.id.advision);
-        mAdVision.setAdVisionListener(new AdVisionListener(){
-            public void onNoReceiveAd(String arg0) {
-                //nothing to do
-            }
-
-            public void onReceiveAd() {
-                //nothing to do
-            }
-        });
-        mAdVision.AdStart("20000000623");
-        */
         
 		/*
         ImageButton plus = (ImageButton)findViewById(R.id.plus);
@@ -263,6 +199,26 @@ public class ContShooting extends Activity {
 			}
         });
         */    	
+    }
+    
+    public void setToHidden(){
+        SurfaceView sv = (SurfaceView)findViewById(R.id.camera);
+        sv.setLayoutParams(new LinearLayout.LayoutParams(54, 36));
+        displayHideMode();
+        mMaskFlag = true;
+        setTitle(R.string.sc_hidden);
+        
+        WebView view = (WebView)findViewById(R.id.review);
+        view.setWebViewClient(new WebViewClient());
+        view.getSettings().setJavaScriptEnabled(true);
+        view.getSettings().setBuiltInZoomControls(true);
+        
+        if(Locale.getDefault().equals(Locale.JAPAN)){
+            view.loadUrl(URL_JP);
+        }
+        else{
+            view.loadUrl(URL_OTHER);
+        }
     }
     
     public void onStart(){

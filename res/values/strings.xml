@@ -21,6 +21,7 @@
 
     <string name="category_shooting">Continuous shooting settings</string>
 	<string name="category_effect">Effect settings</string>
+	<string name="category_display">Display settings</string>
     
     <string name="color_effect">color_effect</string>
     <string name="color_effect_title">Color effect</string>
@@ -54,4 +55,7 @@
 	<string name="interval_summary">Set shooting interval</string>
 	<string name="interval_not_set">No setting</string>
     <string name="str_sec">sec.</string>
+    
+   	<string name="display_hide_title">Hidden mode setting</string>
+	<string name="display_hide_summary">Set hidden mode when launching app</string>
 </resources>

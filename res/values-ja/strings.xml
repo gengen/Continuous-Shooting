@@ -21,8 +21,9 @@
 
     <string name="category_shooting">連写設定</string>
 	<string name="category_effect">エフェクト設定</string>
+    <string name="category_display">画面設定</string>
 
-	<string name="color_effect">color_effect</string>
+    <string name="color_effect">color_effect</string>
 	<string name="color_effect_title">色合い</string>
 	<string name="dialog_color_effect_title">色合い</string>
 	<string name="color_effect_summary">写真の色合いを変更する</string>
@@ -36,7 +37,7 @@
 	<string name="white_balance_title">ホワイトバランス</string>
 	<string name="dialog_white_balance_title">ホワイトバランス</string>
 	<string name="white_balance_summary">ホワイトバランスを調整する</string>
-    
+	
 	<string name="picture_size">picture_size</string>
 	<string name="picture_size_title">画像サイズ</string>
 	<string name="dialog_picture_size_title">画像サイズ</string>
@@ -54,5 +55,7 @@
 	<string name="interval_summary">連写間隔を設定する</string>
 	<string name="interval_not_set">指定無し</string>
 	<string name="str_sec">秒</string>
-	    	
+	
+	<string name="display_hide_title">隠しモード設定</string>
+	<string name="display_hide_summary">起動時に「隠しモード」に設定する</string>
 </resources>

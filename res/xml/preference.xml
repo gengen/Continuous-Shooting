@@ -59,4 +59,13 @@
 			>
 		</ListPreference>
 	</PreferenceCategory>   
+
+      <PreferenceCategory android:title="@string/category_display">
+        <CheckBoxPreference 
+        	android:key="display_hide"
+            android:title="@string/display_hide_title"
+        	android:summary="@string/display_hide_summary"
+        	>
+        </CheckBoxPreference>
+	</PreferenceCategory>   
 </PreferenceScreen>
