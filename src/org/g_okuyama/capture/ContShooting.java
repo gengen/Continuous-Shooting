@@ -75,11 +75,6 @@ public class ContShooting extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
-        //adstirê›íË
-        LinearLayout layout = (LinearLayout)findViewById(R.id.adspace);
-        mAdstirView = new AdstirView(this);
-        layout.addView(mAdstirView);
-        
         mNum = getString(R.string.sc_number);
         mResolver = getContentResolver();
         
@@ -177,6 +172,11 @@ public class ContShooting extends Activity {
 				}
 			}
         });
+        
+        //adstirê›íË
+        LinearLayout layout = (LinearLayout)findViewById(R.id.adspace);
+        mAdstirView = new AdstirView(this);
+        layout.addView(mAdstirView);
         
         /*
         AdMaker = (libAdMaker)findViewById(R.id.admakerview);
