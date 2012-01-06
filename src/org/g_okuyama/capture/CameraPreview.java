@@ -44,10 +44,10 @@ class CameraPreview implements SurfaceHolder.Callback {
     public static final String TAG = "ContShooting";
     Camera mCamera = null;
     Context mContext = null;
-    /*
+
     AutoFocusCallback mFocus = null;
-    private boolean mFocusFlag = false;
-    */
+    //private boolean mFocusFlag = false;
+
     private Size mSize = null;
     private List<Size> mSupportList = null;
     //サポートリストに対する端末の下限値のインデックス
@@ -243,8 +243,19 @@ class CameraPreview implements SurfaceHolder.Callback {
         
         setAllParameters();
 
-        mPreviewCallback = new PreviewCallback(this);
+        //mPreviewCallback = new PreviewCallback(this);
         mCamera.startPreview();
+        //focus
+        mFocus = new AutoFocusCallback(){
+            public void onAutoFocus(boolean success, Camera camera) {
+                mPreviewCallback = new PreviewCallback(CameraPreview.this);
+            }
+        };
+        try{
+            mCamera.autoFocus(mFocus);
+        }catch(Exception e){
+            mPreviewCallback = new PreviewCallback(CameraPreview.this);            
+        }
     }
     
     private void setAllParameters(){

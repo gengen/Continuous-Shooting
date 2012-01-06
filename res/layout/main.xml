@@ -6,29 +6,24 @@
    >
 
 <FrameLayout 
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:layout_weight="1"
 >
 <LinearLayout 
+    android:id="@+id/parent"
 	android:orientation="horizontal"
-   android:layout_width="fill_parent"
-   android:layout_height="fill_parent"	
-    android:layout_weight="1"
+   	android:layout_width="fill_parent"
+   	android:layout_height="fill_parent"	
+    android:gravity="center"
 >
 
-       <FrameLayout 
-       android:id="@+id/frame"
+       <LinearLayout 
+       android:id="@+id/linear"
        android:layout_width="wrap_content"
        android:layout_height="match_parent"
-       android:layout_weight="1"
        >       
-       		 <WebView android:id="@+id/review"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             >             
-    		</WebView>
-       </FrameLayout>
+       </LinearLayout>
 
        <SurfaceView
        android:id="@+id/camera"
@@ -59,19 +54,25 @@
        
 	   <LinearLayout
 	    android:id="@+id/adspace"
-    	android:layout_width="wrap_content"
+    	android:layout_width="320dp"
         android:layout_height="50dp"
-        android:layout_weight="1"
-		android:layout_gravity="left"
        >
        </LinearLayout>
+       
+	   <TextView
+    	android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+	   >
+       </TextView>
 
 	   <TextView
        android:id="@+id/text1"
        android:layout_height="match_parent"
        android:layout_width="wrap_content"
        android:gravity="center"
-       android:text="" >
+       android:text="" 
+       >
        </TextView>
 	   <Button
        android:id="@+id/button1"

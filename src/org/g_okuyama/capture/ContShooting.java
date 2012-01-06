@@ -19,6 +19,7 @@ import android.os.Environment;
 import android.provider.MediaStore.Images.Media;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SurfaceHolder;
@@ -30,6 +31,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -43,6 +45,9 @@ public class ContShooting extends Activity {
     public static final String URL_JP = "http://www.yahoo.co.jp";
     public static final String URL_OTHER = "http://www.yahoo.com";
     
+    static final int MENU_DISP_GALLERY = 1;
+    static final int MENU_DISP_SETTING = 2;
+
     static final int REQUEST_CODE = 1;
     static final int RESPONSE_COLOR_EFFECT = 1;
     static final int RESPONSE_SCENE_MODE = 2;
@@ -50,6 +55,9 @@ public class ContShooting extends Activity {
     static final int RESPONSE_PICTURE_SIZE = 4;
     static final int RESPONSE_SHOOT_NUM = 5;
     static final int RESPONSE_INTERVAL = 6;
+    
+    public static final int HIDDEN_WIDTH = 64; 
+    public static final int HIDDEN_HEIGHT = 48; 
 
     SurfaceHolder mHolder;
     private int mCount = 0;
@@ -63,8 +71,11 @@ public class ContShooting extends Activity {
     private Button mMaskButton = null;
     private String mNum = null;
     private ContentResolver mResolver;
-    private final int MENU_DISP_GALLERY = 1;
-    private final int MENU_DISP_SETTING = 2;
+    
+    private WebView mWebView = null;
+    
+    int mWidth = 0;
+    int mHeight = 0;
     
     private AdstirView mAdstirView;
     
@@ -88,8 +99,8 @@ public class ContShooting extends Activity {
         
         WindowManager wm = (WindowManager)getSystemService(Context.WINDOW_SERVICE);
         Display disp = wm.getDefaultDisplay();
-        int width = disp.getWidth();
-        int height = disp.getHeight();
+        mWidth = disp.getWidth();
+        mHeight = disp.getHeight();
         
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         
@@ -97,8 +108,13 @@ public class ContShooting extends Activity {
         SurfaceView sv = (SurfaceView)findViewById(R.id.camera);
         mHolder = sv.getHolder();
 
+        //èâä˙âÊñ ï\é¶
+        int height = mHeight - 100;
+        int width = (height / 3) * 4;
+        sv.setLayoutParams(new LinearLayout.LayoutParams(width, height));
+
         mPreview = new CameraPreview(this);
-        mPreview.setField(effect, scene, white, size, width, height);
+        mPreview.setField(effect, scene, white, size, mWidth, mHeight);
         mHolder.addCallback(mPreview);
         mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
@@ -143,12 +159,7 @@ public class ContShooting extends Activity {
 			public void onClick(View v) {
 				if(mPreview != null){
                     if(mMaskFlag){
-                        SurfaceView sv = (SurfaceView)findViewById(R.id.camera);
-                        sv.setLayoutParams(new LinearLayout.LayoutParams(
-                                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-                        displayNormalMode();
-                        mMaskFlag = false;
-                        setTitle(R.string.app_name);
+                        setToNormal();
                     }
                     else{
                         setToHidden();
@@ -201,23 +212,50 @@ public class ContShooting extends Activity {
         */    	
     }
     
+    public void setToNormal(){
+        LinearLayout layout = (LinearLayout)findViewById(R.id.linear);
+        layout.removeView(mWebView);
+        layout.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, 
+                LinearLayout.LayoutParams.WRAP_CONTENT));
+        mWebView.setWebViewClient(null);
+        mWebView.destroy();
+        mWebView = null;
+
+        int height = mHeight - 100;
+        int width = (height / 3) * 4;
+        SurfaceView sv = (SurfaceView)findViewById(R.id.camera);
+        sv.setLayoutParams(new LinearLayout.LayoutParams(width, height));
+        
+        displayNormalMode();
+        mMaskFlag = false;
+        setTitle(R.string.app_name);
+    }
+    
     public void setToHidden(){
         SurfaceView sv = (SurfaceView)findViewById(R.id.camera);
-        sv.setLayoutParams(new LinearLayout.LayoutParams(54, 36));
+        sv.setLayoutParams(new LinearLayout.LayoutParams(HIDDEN_WIDTH, HIDDEN_HEIGHT));
         displayHideMode();
         mMaskFlag = true;
         setTitle(R.string.sc_hidden);
         
-        WebView view = (WebView)findViewById(R.id.review);
-        view.setWebViewClient(new WebViewClient());
-        view.getSettings().setJavaScriptEnabled(true);
-        view.getSettings().setBuiltInZoomControls(true);
+        //WebView view = (WebView)findViewById(R.id.review);
+        mWebView = new WebView(ContShooting.this);
+        mWebView.setWebViewClient(new WebViewClient());
+        mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.getSettings().setBuiltInZoomControls(true);
+        LinearLayout layout = (LinearLayout)findViewById(R.id.linear);
+        layout.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, 
+                LinearLayout.LayoutParams.MATCH_PARENT, 
+                1));
+        layout.addView(mWebView);
         
         if(Locale.getDefault().equals(Locale.JAPAN)){
-            view.loadUrl(URL_JP);
+            mWebView.loadUrl(URL_JP);
         }
         else{
-            view.loadUrl(URL_OTHER);
+            mWebView.loadUrl(URL_OTHER);
         }
     }
     
@@ -435,10 +473,16 @@ public class ContShooting extends Activity {
         mMode = mode;
     }
     
+    public boolean isMask(){
+        return mMaskFlag;
+    }
+    
     protected void onPause(){
         //Log.d(TAG, "enter ContShooting#onPause");    	
     	super.onPause();
-    	mAdstirView.stop();
+    	if(mAdstirView != null){
+    	    mAdstirView.stop();
+    	}
     }
     
     protected void onDestroy(){
