@@ -56,8 +56,9 @@ public class ContShooting extends Activity {
     static final int RESPONSE_SHOOT_NUM = 5;
     static final int RESPONSE_INTERVAL = 6;
     
-    public static final int HIDDEN_WIDTH = 64; 
-    public static final int HIDDEN_HEIGHT = 48; 
+    public static final int HIDDEN_WIDTH = /*64*/96; 
+    public static final int HIDDEN_HEIGHT = /*48*/72;
+    public static final int MARGIN_HEIGHT = 120;
 
     SurfaceHolder mHolder;
     private int mCount = 0;
@@ -104,14 +105,15 @@ public class ContShooting extends Activity {
         
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         
-        //getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         SurfaceView sv = (SurfaceView)findViewById(R.id.camera);
         mHolder = sv.getHolder();
 
         //èâä˙âÊñ ï\é¶
-        int height = mHeight - 100;
+        int height = mHeight - MARGIN_HEIGHT;
         int width = (height / 3) * 4;
         sv.setLayoutParams(new LinearLayout.LayoutParams(width, height));
+        //sv.setLayoutParams(new LinearLayout.LayoutParams(544, 320));
 
         mPreview = new CameraPreview(this);
         mPreview.setField(effect, scene, white, size, mWidth, mHeight);
@@ -176,7 +178,6 @@ public class ContShooting extends Activity {
         LinearLayout layout = (LinearLayout)findViewById(R.id.adspace);
         mAdstirView = new AdstirView(this);
         layout.addView(mAdstirView);
-        
 		/*
         ImageButton plus = (ImageButton)findViewById(R.id.plus);
         plus.setOnClickListener(new OnClickListener(){
@@ -222,7 +223,7 @@ public class ContShooting extends Activity {
         mWebView.destroy();
         mWebView = null;
 
-        int height = mHeight - 100;
+        int height = mHeight - MARGIN_HEIGHT;
         int width = (height / 3) * 4;
         SurfaceView sv = (SurfaceView)findViewById(R.id.camera);
         sv.setLayoutParams(new LinearLayout.LayoutParams(width, height));
@@ -233,12 +234,6 @@ public class ContShooting extends Activity {
     }
     
     public void setToHidden(){
-        SurfaceView sv = (SurfaceView)findViewById(R.id.camera);
-        sv.setLayoutParams(new LinearLayout.LayoutParams(HIDDEN_WIDTH, HIDDEN_HEIGHT));
-        displayHideMode();
-        mMaskFlag = true;
-        setTitle(R.string.sc_hidden);
-        
         //WebView view = (WebView)findViewById(R.id.review);
         mWebView = new WebView(ContShooting.this);
         mWebView.setWebViewClient(new WebViewClient());
@@ -257,7 +252,13 @@ public class ContShooting extends Activity {
         else{
             mWebView.loadUrl(URL_OTHER);
         }
-    }
+
+        SurfaceView sv = (SurfaceView)findViewById(R.id.camera);
+        sv.setLayoutParams(new LinearLayout.LayoutParams(HIDDEN_WIDTH, HIDDEN_HEIGHT));
+        displayHideMode();
+        mMaskFlag = true;
+        setTitle(R.string.sc_hidden);        
+}
     
     public void onStart(){
     	//Log.d(TAG, "enter ContShooting#onStart");
