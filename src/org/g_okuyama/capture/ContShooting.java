@@ -68,8 +68,8 @@ public class ContShooting extends Activity {
     public int mMode = 0;
     private boolean mMaskFlag = false;
     
-    private Button mButton = null;
-    private Button mMaskButton = null;
+    private ImageButton mButton = null;
+    private ImageButton mMaskButton = null;
     private String mNum = null;
     private ContentResolver mResolver;
     
@@ -140,7 +140,7 @@ public class ContShooting extends Activity {
     }
     
     private void setListener(){
-        mButton = (Button)findViewById(R.id.button1);
+        mButton = (ImageButton)findViewById(R.id.imgbtn);
         mButton.setOnClickListener(new OnClickListener(){
 			public void onClick(View v) {
 				if(mPreview != null){
@@ -156,7 +156,7 @@ public class ContShooting extends Activity {
 			}
         });
         
-        mMaskButton = (Button)findViewById(R.id.mask_btn);
+        mMaskButton = (ImageButton)findViewById(R.id.mask_imgbtn);
         mMaskButton.setOnClickListener(new OnClickListener(){
 			public void onClick(View v) {
 				if(mPreview != null){
@@ -445,25 +445,19 @@ public class ContShooting extends Activity {
     }
     
     public void displayStart(){
-    	//sButton.setCompoundDrawablesWithIntrinsicBounds(android.R.drawable.ic_menu_camera, 0, 0, 0);
-    	mButton.setTextColor(0xffffffff);
-    	mButton.setText(R.string.sc_start);
+    	mButton.setImageResource(R.drawable.start);
     }
     
     public void displayStop(){
-    	//sButton.setCompoundDrawablesWithIntrinsicBounds(android.R.drawable.ic_menu_close_clear_cancel, 0, 0, 0);
-    	mButton.setTextColor(0xffffffff);
-    	mButton.setText(R.string.sc_stop);
+        mButton.setImageResource(R.drawable.stop);
     }
     
     void displayHideMode(){
-        mMaskButton.setTextColor(0xffffffff);
-        mMaskButton.setText(R.string.sc_back);
+        mMaskButton.setImageResource(R.drawable.scale_up);
     }
     
     void displayNormalMode(){
-        mMaskButton.setTextColor(0xffffffff);
-        mMaskButton.setText(R.string.sc_mask);        
+        mMaskButton.setImageResource(R.drawable.scale_down);
     }
     
     public void saveGallery(ContentValues values){

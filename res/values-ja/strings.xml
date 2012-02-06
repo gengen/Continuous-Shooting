@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">無音連写カメラくん</string>
-    <string name="sc_mask">隠す</string>
     <string name="sc_hidden">Hidden mode now</string>
-    <string name="sc_back">戻す</string>
-    <string name="sc_start">開始</string>
-    <string name="sc_stop">停止</string>
     <string name="sc_number">撮影枚数</string>
     <string name="sc_menu_gallery">ギャラリー</string>
     <string name="sc_menu_gallery_ng">ギャラリーを起動できません</string>
