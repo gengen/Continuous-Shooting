@@ -1,5 +1,6 @@
 package org.g_okuyama.capture;
 
+import java.io.File;
 import java.util.List;
 import java.util.Locale;
 
@@ -20,6 +21,7 @@ import android.provider.MediaStore.Images.Media;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SurfaceHolder;
@@ -512,7 +514,26 @@ public class ContShooting extends Activity {
 		})
 		.show();
 		*/
-    	
+
+        //アプリのキャッシュ削除
+        deleteCache(getCacheDir());
+        
 		System.exit(RESULT_OK);
+    }
+    
+    public static boolean deleteCache(File dir) {
+        if(dir==null) {
+            return false;
+        }
+        if (dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteCache(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+        }
+        return dir.delete();
     }
 }
