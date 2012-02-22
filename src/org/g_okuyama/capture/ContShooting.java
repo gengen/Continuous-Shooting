@@ -60,7 +60,6 @@ public class ContShooting extends Activity {
     
     public static final int HIDDEN_WIDTH = /*64*/96; 
     public static final int HIDDEN_HEIGHT = /*48*/72;
-    public static final int MARGIN_HEIGHT = 120;
 
     SurfaceHolder mHolder;
     private int mCount = 0;
@@ -76,9 +75,12 @@ public class ContShooting extends Activity {
     private ContentResolver mResolver;
     
     private WebView mWebView = null;
-    
+    //全体の画面サイズ
     int mWidth = 0;
     int mHeight = 0;
+    //プレビュー枠のサイズ
+    int mPrevWidth = 0;
+    int mPrevHeight = 0;
     
     private AdstirView mAdstirView;
     
@@ -111,10 +113,11 @@ public class ContShooting extends Activity {
         SurfaceView sv = (SurfaceView)findViewById(R.id.camera);
         mHolder = sv.getHolder();
 
-        //初期画面表示
-        int height = mHeight - MARGIN_HEIGHT;
-        int width = (height / 3) * 4;
-        sv.setLayoutParams(new LinearLayout.LayoutParams(width, height));
+        //初期画面表示(全体の高さの3/4をプレビューサイズの初期値とする)
+        int margin = mHeight / 4;
+        mPrevHeight = mHeight - margin;
+        mPrevWidth = (mPrevHeight / 3) * 4;
+        sv.setLayoutParams(new LinearLayout.LayoutParams(mPrevWidth, mPrevHeight));
         //sv.setLayoutParams(new LinearLayout.LayoutParams(544, 320));
 
         mPreview = new CameraPreview(this);
@@ -225,10 +228,12 @@ public class ContShooting extends Activity {
         mWebView.destroy();
         mWebView = null;
 
-        int height = mHeight - MARGIN_HEIGHT;
-        int width = (height / 3) * 4;
+        //全体の高さの3/4をプレビューサイズの初期値とする
+        int margin = mHeight / 4;
+        mPrevHeight = mHeight - margin;
+        mPrevWidth = (mPrevHeight / 3) * 4;
         SurfaceView sv = (SurfaceView)findViewById(R.id.camera);
-        sv.setLayoutParams(new LinearLayout.LayoutParams(width, height));
+        sv.setLayoutParams(new LinearLayout.LayoutParams(mPrevWidth, mPrevHeight));
         
         displayNormalMode();
         mMaskFlag = false;
@@ -241,6 +246,7 @@ public class ContShooting extends Activity {
         mWebView.setWebViewClient(new WebViewClient());
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setBuiltInZoomControls(true);
+        mWebView.getSettings().setAppCacheEnabled(false);
         LinearLayout layout = (LinearLayout)findViewById(R.id.linear);
         layout.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, 
@@ -256,7 +262,9 @@ public class ContShooting extends Activity {
         }
 
         SurfaceView sv = (SurfaceView)findViewById(R.id.camera);
-        sv.setLayoutParams(new LinearLayout.LayoutParams(HIDDEN_WIDTH, HIDDEN_HEIGHT));
+        int hide_width = mPrevWidth / 6;
+        int hide_height = mPrevHeight / 6;
+        sv.setLayoutParams(new LinearLayout.LayoutParams(hide_width, hide_height));
         displayHideMode();
         mMaskFlag = true;
         setTitle(R.string.sc_hidden);        
