@@ -351,19 +351,17 @@ class CameraPreview implements SurfaceHolder.Callback {
     */
     
     public void setZoom(boolean flag){
-    	
+    	/*
     	if(mCamera == null){
     		return;
     	}
     	
         Camera.Parameters params = mCamera.getParameters();
 
-        /*
-        if(params.isSmoothZoomSupported() == false){
-            Log.d(TAG, "Zoom is not supported");
-        	return;
-        }
-        */
+        //if(params.isSmoothZoomSupported() == false){
+        //Log.d(TAG, "Zoom is not supported");
+        //	return;
+        //}
         
         List ZoomRatislist = params.getZoomRatios ();
         for (int i=0;i < ZoomRatislist.size();i++) {
@@ -391,6 +389,7 @@ class CameraPreview implements SurfaceHolder.Callback {
         		mCamera.setParameters(params);
         	}
         }
+        */
     }
     
     List<String> getEffectList(){

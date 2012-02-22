@@ -250,7 +250,7 @@ public class ContShooting extends Activity {
         LinearLayout layout = (LinearLayout)findViewById(R.id.linear);
         layout.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, 
-                LinearLayout.LayoutParams.MATCH_PARENT, 
+                LinearLayout.LayoutParams.FILL_PARENT, 
                 1));
         layout.addView(mWebView);
         
