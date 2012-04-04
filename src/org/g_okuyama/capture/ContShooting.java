@@ -175,6 +175,15 @@ public class ContShooting extends Activity {
 			}
         });
         
+        ImageButton focus = (ImageButton)findViewById(R.id.focusbtn);
+        focus.setOnClickListener(new OnClickListener(){
+			public void onClick(View v) {
+				if(mPreview != null){
+						mPreview.doAutoFocus();
+				}
+			}
+        });
+        
         if(ContShootingPreference.isHidden(this)){
             setToHidden();
         }

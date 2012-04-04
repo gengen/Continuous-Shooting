@@ -52,6 +52,15 @@
 	   >
        </ImageButton>
        
+       <ImageButton 
+           android:id="@+id/focusbtn"
+           android:src="@drawable/focus"
+           android:background="@null"
+	       android:layout_height="50sp"
+    	   android:layout_width="50sp"
+    	   android:scaleType="fitXY"
+       />
+       
 	   <LinearLayout
 	    android:id="@+id/adspace"
     	android:layout_width="320sp"
