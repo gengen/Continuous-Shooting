@@ -71,6 +71,7 @@ public class ContShooting extends Activity {
     
     private ImageButton mButton = null;
     private ImageButton mMaskButton = null;
+    private ImageButton mFocusButton = null;
     private String mNum = null;
     private ContentResolver mResolver;
     
@@ -152,10 +153,14 @@ public class ContShooting extends Activity {
 					if(mMode == 0){
 						mPreview.resumePreview();
 						mMode = 1;
+                        //フォーカスボタンを見えなくする
+                        mFocusButton.setVisibility(View.INVISIBLE);
 					}
 					else{
 						mPreview.stopPreview();
 						mMode = 0;
+                        //フォーカスボタンを見えるようにする
+                        mFocusButton.setVisibility(View.VISIBLE);
 					}
 				}
 			}
@@ -175,8 +180,8 @@ public class ContShooting extends Activity {
 			}
         });
         
-        ImageButton focus = (ImageButton)findViewById(R.id.focusbtn);
-        focus.setOnClickListener(new OnClickListener(){
+        mFocusButton = (ImageButton)findViewById(R.id.focusbtn);
+        mFocusButton.setOnClickListener(new OnClickListener(){
 			public void onClick(View v) {
 				if(mPreview != null){
 						mPreview.doAutoFocus();
