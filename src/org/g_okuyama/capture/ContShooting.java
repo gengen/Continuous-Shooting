@@ -195,7 +195,7 @@ public class ContShooting extends Activity {
         
         //adstirê›íË
         LinearLayout layout = (LinearLayout)findViewById(R.id.adspace);
-        mAdstirView = new AdstirView(this);
+        mAdstirView = new AdstirView(this, 1);
         layout.addView(mAdstirView);
 		/*
         ImageButton plus = (ImageButton)findViewById(R.id.plus);
@@ -218,18 +218,6 @@ public class ContShooting extends Activity {
 			}
         });
         */
-        
-        /*
-        Button focus = (Button)findViewById(R.id.focus);
-        focus.setOnClickListener(new OnClickListener(){
-			@Override
-			public void onClick(View v) {
-				if(mPreview != null){
-					mPreview.changeFocus();
-				}
-			}
-        });
-        */    	
     }
     
     public void setToNormal(){
@@ -502,6 +490,16 @@ public class ContShooting extends Activity {
     	if(mAdstirView != null){
     	    mAdstirView.stop();
     	}
+    }
+    
+    protected void onResume(){
+        super.onResume();
+        
+        //adstirê›íË
+        LinearLayout layout = (LinearLayout)findViewById(R.id.adspace);
+        mAdstirView = new AdstirView(this, 1);
+        layout.addView(mAdstirView);
+        mAdstirView.start();
     }
     
     protected void onDestroy(){

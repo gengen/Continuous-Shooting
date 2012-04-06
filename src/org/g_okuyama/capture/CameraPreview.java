@@ -334,22 +334,6 @@ class CameraPreview implements SurfaceHolder.Callback {
 		//プレビューだけ開始する(画像保存はしない(setPreviewCallbackを呼ばない))
         mCamera.startPreview();
     }
-    
-    /*
-    public void changeFocus(){
-    	Log.d(TAG, "enter changeFocus");
-    	
-    	stopPreview();
-    	if(mFocusFlag){
-    		mFocusFlag = false;
-    	}
-    	else{
-    		mFocusFlag = true;
-    	}
-    	resumePreview();
-    }
-    */
-    
 
     void doAutoFocus(){
         mCamera.setPreviewCallback(null);
