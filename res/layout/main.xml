@@ -63,7 +63,8 @@
        
 	   <LinearLayout
 	    android:id="@+id/adspace"
-    	android:layout_width="320sp"
+    	android:layout_width="0pt"
+    	android:layout_weight="1"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
        >
