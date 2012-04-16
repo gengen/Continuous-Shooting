@@ -155,12 +155,14 @@ public class ContShooting extends Activity {
 						mMode = 1;
                         //フォーカスボタンを見えなくする
                         mFocusButton.setVisibility(View.INVISIBLE);
+                        mMaskButton.setVisibility(View.INVISIBLE);
 					}
 					else{
 						mPreview.stopPreview();
 						mMode = 0;
                         //フォーカスボタンを見えるようにする
                         mFocusButton.setVisibility(View.VISIBLE);
+                        mMaskButton.setVisibility(View.VISIBLE);
 					}
 				}
 			}
