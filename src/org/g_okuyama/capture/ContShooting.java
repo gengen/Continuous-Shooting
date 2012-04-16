@@ -115,11 +115,11 @@ public class ContShooting extends Activity {
         mHolder = sv.getHolder();
 
         //初期画面表示(全体の高さの3/4をプレビューサイズの初期値とする)
+        FrameLayout frame = (FrameLayout)findViewById(R.id.camera_parent);
         int margin = mHeight / 4;
         mPrevHeight = mHeight - margin;
         mPrevWidth = (mPrevHeight / 3) * 4;
-        sv.setLayoutParams(new LinearLayout.LayoutParams(mPrevWidth, mPrevHeight));
-        //sv.setLayoutParams(new LinearLayout.LayoutParams(544, 320));
+        frame.setLayoutParams(new FrameLayout.LayoutParams(mPrevWidth, mPrevHeight, Gravity.CENTER_HORIZONTAL));
 
         mPreview = new CameraPreview(this);
         mPreview.setField(effect, scene, white, size, mWidth, mHeight);
@@ -221,21 +221,23 @@ public class ContShooting extends Activity {
     }
     
     public void setToNormal(){
-        LinearLayout layout = (LinearLayout)findViewById(R.id.linear);
+        FrameLayout layout = (FrameLayout)findViewById(R.id.linear);
         layout.removeView(mWebView);
-        layout.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, 
-                LinearLayout.LayoutParams.WRAP_CONTENT));
+        layout.setLayoutParams(new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.FILL_PARENT, 
+                FrameLayout.LayoutParams.WRAP_CONTENT));
         mWebView.setWebViewClient(null);
         mWebView.destroy();
         mWebView = null;
 
-        //全体の高さの3/4をプレビューサイズの初期値とする
-        int margin = mHeight / 4;
-        mPrevHeight = mHeight - margin;
-        mPrevWidth = (mPrevHeight / 3) * 4;
-        SurfaceView sv = (SurfaceView)findViewById(R.id.camera);
-        sv.setLayoutParams(new LinearLayout.LayoutParams(mPrevWidth, mPrevHeight));
+        FrameLayout frame = (FrameLayout)findViewById(R.id.camera_parent);
+        /*
+        frame.setLayoutParams(new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.FILL_PARENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT));
+                */
+        frame.setLayoutParams(new FrameLayout.LayoutParams(mPrevWidth, mPrevHeight, Gravity.CENTER_HORIZONTAL));
+
         
         displayNormalMode();
         mMaskFlag = false;
@@ -243,16 +245,15 @@ public class ContShooting extends Activity {
     }
     
     public void setToHidden(){
-        //WebView view = (WebView)findViewById(R.id.review);
         mWebView = new WebView(ContShooting.this);
         mWebView.setWebViewClient(new WebViewClient());
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setBuiltInZoomControls(true);
         mWebView.getSettings().setAppCacheEnabled(false);
-        LinearLayout layout = (LinearLayout)findViewById(R.id.linear);
-        layout.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, 
-                LinearLayout.LayoutParams.FILL_PARENT, 
+        FrameLayout layout = (FrameLayout)findViewById(R.id.linear);
+        layout.setLayoutParams(new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.FILL_PARENT, 
+                FrameLayout.LayoutParams.WRAP_CONTENT, 
                 1));
         layout.addView(mWebView);
         
@@ -263,10 +264,12 @@ public class ContShooting extends Activity {
             mWebView.loadUrl(URL_OTHER);
         }
 
-        SurfaceView sv = (SurfaceView)findViewById(R.id.camera);
-        int hide_width = mPrevWidth / 6;
-        int hide_height = mPrevHeight / 6;
-        sv.setLayoutParams(new LinearLayout.LayoutParams(hide_width, hide_height));
+
+    	FrameLayout frame = (FrameLayout)findViewById(R.id.camera_parent);
+        int hide_height = mHeight / 6;
+        int hide_width = hide_height / 3 * 4;
+        frame.setLayoutParams(new FrameLayout.LayoutParams(hide_width, hide_height, Gravity.BOTTOM));
+        
         displayHideMode();
         mMaskFlag = true;
         setTitle(R.string.sc_hidden);        
