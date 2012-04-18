@@ -266,8 +266,9 @@ public class ContShooting extends Activity {
             mWebView.loadUrl(URL_OTHER);
         }
 
+
     	FrameLayout frame = (FrameLayout)findViewById(R.id.camera_parent);
-        int hide_height = mHeight / 4;
+        int hide_height = mHeight / 6;
         int hide_width = hide_height / 3 * 4;
         frame.setLayoutParams(new FrameLayout.LayoutParams(hide_width, hide_height, Gravity.BOTTOM));
         
