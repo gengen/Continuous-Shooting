@@ -7,5 +7,7 @@
 	<classpathentry kind="lib" path="lib/adstir.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="lib" path="lib/adstir_medibaad.jar"/>
+	<classpathentry kind="lib" path="lib/MedibaAdSDK.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
