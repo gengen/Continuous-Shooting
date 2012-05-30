@@ -57,10 +57,8 @@ public class ContShooting extends Activity {
     static final int RESPONSE_PICTURE_SIZE = 4;
     static final int RESPONSE_SHOOT_NUM = 5;
     static final int RESPONSE_INTERVAL = 6;
+    static final int RESPONSE_HIDDEN_SIZE = 7;
     
-    public static final int HIDDEN_WIDTH = /*64*/96; 
-    public static final int HIDDEN_HEIGHT = /*48*/72;
-
     SurfaceHolder mHolder;
     private int mCount = 0;
     private TextView mText;
@@ -83,6 +81,8 @@ public class ContShooting extends Activity {
     int mPrevWidth = 0;
     int mPrevHeight = 0;
     
+    int mHiddenSizeIdx = 0;
+    
     private AdstirView mAdstirView;
     
     /** Called when the activity is first created. */
@@ -100,6 +100,7 @@ public class ContShooting extends Activity {
         String scene = ContShootingPreference.getCurrentSceneMode(this);
         String white = ContShootingPreference.getCurrentWhiteBalance(this);
         String size = ContShootingPreference.getCurrentPictureSize(this);
+        mHiddenSizeIdx = Integer.parseInt(ContShootingPreference.getCurrentHiddenSize(this));
         
         //Log.d(TAG, "picsize = " + size);
         
@@ -240,7 +241,6 @@ public class ContShooting extends Activity {
                 */
         frame.setLayoutParams(new FrameLayout.LayoutParams(mPrevWidth, mPrevHeight, Gravity.CENTER_HORIZONTAL));
 
-        
         displayNormalMode();
         mMaskFlag = false;
         setTitle(R.string.app_name);
@@ -266,10 +266,26 @@ public class ContShooting extends Activity {
             mWebView.loadUrl(URL_OTHER);
         }
 
-
     	FrameLayout frame = (FrameLayout)findViewById(R.id.camera_parent);
+    	/*
         int hide_height = mHeight / 6;
         int hide_width = hide_height / 3 * 4;
+        */
+    	/*
+    	 * 隠しモードのプレビューサイズ設定
+    	 * 大=1/4, 小=1/6, 無し=1*1
+    	 */
+    	int denom = 6;
+        if(mHiddenSizeIdx == 1){
+            denom = 4;
+        }
+        int hide_height = mHeight / denom;
+        int hide_width = hide_height / 3 * 4;
+
+        if(mHiddenSizeIdx == 3){
+            hide_height = 1;
+            hide_width = 1;            
+        }
         frame.setLayoutParams(new FrameLayout.LayoutParams(hide_width, hide_height, Gravity.BOTTOM));
         
         displayHideMode();
@@ -452,6 +468,14 @@ public class ContShooting extends Activity {
             if(resultCode == RESPONSE_INTERVAL){
                 if(mPreview != null){
                     mPreview.setInterval(data.getIntExtra("interval", 0));
+                }
+            }
+            if(resultCode == RESPONSE_HIDDEN_SIZE){
+                //隠しモードサイズ設定
+                mHiddenSizeIdx = data.getIntExtra("hidden_size", 0);
+                //隠しモードの場合は、一旦戻す
+                if(mMaskFlag){
+                    setToNormal();
                 }
             }
         }
