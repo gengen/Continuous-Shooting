@@ -52,6 +52,14 @@
 	<string name="interval_not_set">指定無し</string>
 	<string name="str_sec">秒</string>
 	
-	<string name="display_hide_title">隠しモード設定</string>
+	<string name="display_hide_title">隠しモード起動</string>
 	<string name="display_hide_summary">起動時に「隠しモード」に設定する</string>
+
+	<string name="hidden_size">hidden_size</string>
+	<string name="hidden_size_title">隠しモードサイズ</string>
+	<string name="dialog_hidden_size_title">隠しモードサイズ</string>
+	<string name="hidden_size_summary">隠しモードのプレビューサイズを設定する</string>
+	<string name="hidden_size_big">大</string>
+	<string name="hidden_size_small">小</string>
+	<string name="hidden_size_none">無し</string>
 </resources>
