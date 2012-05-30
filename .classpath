@@ -7,7 +7,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="lib/MedibaAdSDK.jar"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry kind="lib" path="D:/proj/workspace/Continuous-Shooting/lib/adstir.jar"/>
-	<classpathentry kind="lib" path="D:/proj/workspace/Continuous-Shooting/lib/adstir_medibaad.jar"/>
+	<classpathentry kind="lib" path="C:/Users/gengen/workspace/Continuous-Shooting/lib/adstir.jar"/>
+	<classpathentry kind="lib" path="C:/Users/gengen/workspace/Continuous-Shooting/lib/adstir_medibaad.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
