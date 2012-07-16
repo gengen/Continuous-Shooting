@@ -51,10 +51,12 @@
 </FrameLayout>
 
 <LinearLayout
+       android:id="@+id/bottom_view"
        android:layout_width="fill_parent"
        android:layout_height="50sp"
        android:orientation="horizontal"
    	   android:gravity="bottom"
+   	   android:background="#000000"
        >
     
 	   <ImageButton

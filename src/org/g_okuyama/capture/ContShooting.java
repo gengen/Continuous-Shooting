@@ -27,6 +27,7 @@ import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -90,6 +91,9 @@ public class ContShooting extends Activity {
     public void onCreate(Bundle savedInstanceState) {
     	//Log.d(TAG, "enter ContShooting#onCreate");
         super.onCreate(savedInstanceState);
+        //for 2.5
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        
         setContentView(R.layout.main);
         
         mNum = getString(R.string.sc_number);
@@ -109,15 +113,17 @@ public class ContShooting extends Activity {
         mWidth = disp.getWidth();
         mHeight = disp.getHeight();
         
-        //requestWindowFeature(Window.FEATURE_NO_TITLE);
-        
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         SurfaceView sv = (SurfaceView)findViewById(R.id.camera);
         mHolder = sv.getHolder();
+        
+        //画面下方にあるViewの高さを取得
+        LinearLayout bottom = (LinearLayout)findViewById(R.id.bottom_view);
+        int margin = bottom.getHeight();
 
         //初期画面表示(全体の高さの3/4をプレビューサイズの初期値とする)
         FrameLayout frame = (FrameLayout)findViewById(R.id.camera_parent);
-        int margin = mHeight / 4;
+        //int margin = mHeight / 4;
         mPrevHeight = mHeight - margin;
         mPrevWidth = (mPrevHeight / 3) * 4;
         frame.setLayoutParams(new FrameLayout.LayoutParams(mPrevWidth, mPrevHeight, Gravity.CENTER_HORIZONTAL));
