@@ -158,14 +158,14 @@ public class ContShooting extends Activity {
 			public void onClick(View v) {
 				if(mPreview != null){
 					if(mMode == 0){
-						mPreview.resumePreview();
+						mPreview.resumeShooting();
 						mMode = 1;
                         //フォーカスボタンを見えなくする
                         mFocusButton.setVisibility(View.INVISIBLE);
                         mMaskButton.setVisibility(View.INVISIBLE);
 					}
 					else{
-						mPreview.stopPreview();
+						mPreview.stopShooting();
 						mMode = 0;
                         //フォーカスボタンを見えるようにする
                         mFocusButton.setVisibility(View.VISIBLE);
