@@ -530,9 +530,11 @@ public class ContShooting extends Activity {
     protected void onPause(){
         //Log.d(TAG, "enter ContShooting#onPause");    	
     	super.onPause();
+    	/*
     	if(mAdstirView != null){
     	    mAdstirView.stop();
     	}
+    	*/
     }
     
     protected void onResume(){
@@ -543,14 +545,13 @@ public class ContShooting extends Activity {
         LinearLayout layout = (LinearLayout)findViewById(R.id.adspace);
         mAdstirView = new AdstirView(this, "74792bcf", 1);
         layout.addView(mAdstirView);
-        */
         mAdstirView.start();
+        */
     }
     
     protected void onDestroy(){
         //Log.d(TAG, "enter ContShooting#onDestroy");
     	super.onDestroy();
-        //new AdstirTerminate(this);
     	AdstirTerminate.init(this);
     	if(mPreview != null){
     	    mPreview.release();
