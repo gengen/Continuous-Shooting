@@ -40,8 +40,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ngigroup.adstir.AdstirView;
-import com.ngigroup.adstir.AdstirTerminate;
+import com.ad_stir.AdstirView;
+import com.ad_stir.AdstirTerminate;
 
 public class ContShooting extends Activity {
     private static final String TAG = "ContShooting";
@@ -204,7 +204,7 @@ public class ContShooting extends Activity {
         
         //adstirê›íË
         LinearLayout layout = (LinearLayout)findViewById(R.id.adspace);
-        mAdstirView = new AdstirView(this, 1);
+        mAdstirView = new AdstirView(this, "74792bcf", 1);
         layout.addView(mAdstirView);
 		/*
         ImageButton plus = (ImageButton)findViewById(R.id.plus);
@@ -539,16 +539,19 @@ public class ContShooting extends Activity {
         super.onResume();
         
         //adstirê›íË
+        /*
         LinearLayout layout = (LinearLayout)findViewById(R.id.adspace);
-        mAdstirView = new AdstirView(this, 1);
+        mAdstirView = new AdstirView(this, "74792bcf", 1);
         layout.addView(mAdstirView);
+        */
         mAdstirView.start();
     }
     
     protected void onDestroy(){
         //Log.d(TAG, "enter ContShooting#onDestroy");
     	super.onDestroy();
-        new AdstirTerminate(this);
+        //new AdstirTerminate(this);
+    	AdstirTerminate.init(this);
     	if(mPreview != null){
     	    mPreview.release();
     	}

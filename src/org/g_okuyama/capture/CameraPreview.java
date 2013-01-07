@@ -316,13 +316,15 @@ class CameraPreview implements SurfaceHolder.Callback {
     public void stopShooting(){
     	//Log.d(TAG, "enter CameraPreview#stopPreview");
 
-    	mCamera.stopPreview();
-        mCamera.setPreviewCallback(null);
-		//ボタン表示を「開始」に変更する
-		((ContShooting)mContext).displayStart();
-        mNum = 0;
-		//プレビューだけ開始する(画像保存はしない(setPreviewCallbackを呼ばない))
-        mCamera.startPreview();
+        if(mCamera != null){
+            mCamera.stopPreview();
+            mCamera.setPreviewCallback(null);
+            //ボタン表示を「開始」に変更する
+            ((ContShooting)mContext).displayStart();
+            mNum = 0;
+            //プレビューだけ開始する(画像保存はしない(setPreviewCallbackを呼ばない))
+            mCamera.startPreview();
+        }
     }
 
     void doAutoFocus(){
