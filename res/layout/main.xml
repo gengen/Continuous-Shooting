@@ -1,22 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-   android:orientation="horizontal"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:orientation="vertical"
    android:layout_width="fill_parent"
    android:layout_height="fill_parent"
    >
 
-<LinearLayout
-   android:orientation="horizontal"
-   android:layout_width="fill_parent"
-   android:layout_height="fill_parent"
->    
-
 <FrameLayout 
     android:id="@+id/parent"
 	android:orientation="vertical"
-   	android:layout_width="0pt"
-   	android:layout_height="fill_parent"
-   	android:layout_weight="1"
+   	android:layout_width="fill_parent"
+   	android:layout_height="0pt"
+   	android:layout_weight="1"	
     android:gravity="center"
 >
        <FrameLayout 
@@ -39,32 +33,31 @@
        </SurfaceView>
        </FrameLayout>
        
-<FrameLayout 
-   android:layout_width="wrap_content"
-   android:layout_height="wrap_content"
-   android:layout_gravity="bottom"
-   >
-	<LinearLayout
-	android:id="@+id/adspace"
-    android:layout_width="320sp"
-    android:layout_height="50sp"
-    >
-</LinearLayout>       
+       <FrameLayout 
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_gravity="right|bottom"
+       >
+       		<TextView
+       		android:id="@+id/text1"
+       		android:layout_height="fill_parent"
+       		android:layout_width="wrap_content"
+       		android:gravity="center"
+       		android:background="#00000000"
+       		android:text="" 
+       		>
+       </TextView>
+       </FrameLayout>
 </FrameLayout>
 
-</FrameLayout>
-
-<LinearLayout 
-       android:layout_width="50sp"
-       android:layout_height="fill_parent"
-       android:layout_gravity="right"
-    >
-       
-    <LinearLayout 
-       android:layout_width="50sp"
-       android:layout_height="fill_parent"
-   	   android:orientation="vertical"        
-        >
+<LinearLayout
+       android:id="@+id/bottom_view"
+       android:layout_width="fill_parent"
+       android:layout_height="50sp"
+       android:orientation="horizontal"
+   	   android:gravity="bottom"
+   	   android:background="#000000"
+       >
     
 	   <ImageButton
        android:id="@+id/mask_imgbtn"
@@ -85,34 +78,31 @@
     	   android:scaleType="fitXY"
        />
        
-   	   <TextView
-    	android:layout_width="fill_parent"
-        android:layout_height="0pt"
+	   <LinearLayout
+	    android:id="@+id/adspace"
+    	android:layout_width="320sp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+       >
+       </LinearLayout>
+       
+	   <TextView
+    	android:layout_width="0pt"
+        android:layout_height="fill_parent"
         android:layout_weight="1"
        android:background="#00000000"
 	   >
        </TextView>
 
-       	<TextView
-  		android:id="@+id/text1"
-   		android:layout_height="wrap_content"
-   		android:layout_width="fill_parent"
-   		android:gravity="center"
-   		android:background="#00000000"
-   		android:text="" 
-       		>
-	</TextView>
 	   <ImageButton
        android:id="@+id/imgbtn"
        android:src="@drawable/start"
        android:background="@null"
-       android:layout_height="65sp"
+       android:layout_height="50sp"
        android:layout_width="50sp"
        android:layout_gravity="right"
 	   android:scaleType="fitXY"
        >
        </ImageButton>
-       </LinearLayout>
 </LinearLayout>
 </LinearLayout>
-</FrameLayout>

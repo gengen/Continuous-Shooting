@@ -116,9 +116,7 @@ public class ContShooting extends Activity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         SurfaceView sv = (SurfaceView)findViewById(R.id.camera);
         mHolder = sv.getHolder();
-
-        //delete for 3.0
-        /*
+        
         //âÊñ â∫ï˚Ç…Ç†ÇÈViewÇÃçÇÇ≥ÇéÊìæ
         LinearLayout bottom = (LinearLayout)findViewById(R.id.bottom_view);
         int margin = bottom.getHeight();
@@ -129,7 +127,6 @@ public class ContShooting extends Activity {
         mPrevHeight = mHeight - margin;
         mPrevWidth = (mPrevHeight / 3) * 4;
         frame.setLayoutParams(new FrameLayout.LayoutParams(mPrevWidth, mPrevHeight, Gravity.CENTER_HORIZONTAL));
-        */
 
         mPreview = new CameraPreview(this);
         mPreview.setField(effect, scene, white, size, mWidth, mHeight);
@@ -243,10 +240,12 @@ public class ContShooting extends Activity {
         mWebView = null;
 
         FrameLayout frame = (FrameLayout)findViewById(R.id.camera_parent);
+        /*
         frame.setLayoutParams(new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.FILL_PARENT,
                 FrameLayout.LayoutParams.WRAP_CONTENT));
-        //frame.setLayoutParams(new FrameLayout.LayoutParams(mPrevWidth, mPrevHeight, Gravity.CENTER_HORIZONTAL));
+                */
+        frame.setLayoutParams(new FrameLayout.LayoutParams(mPrevWidth, mPrevHeight, Gravity.CENTER_HORIZONTAL));
 
         displayNormalMode();
         mMaskFlag = false;
@@ -293,7 +292,8 @@ public class ContShooting extends Activity {
             hide_height = 1;
             hide_width = 1;            
         }
-        frame.setLayoutParams(new FrameLayout.LayoutParams(hide_width, hide_height, Gravity.BOTTOM|Gravity.RIGHT));
+        frame.setLayoutParams(new FrameLayout.LayoutParams(hide_width, hide_height, Gravity.BOTTOM));
+        
         displayHideMode();
         mMaskFlag = true;
         setTitle(R.string.sc_hidden);        
