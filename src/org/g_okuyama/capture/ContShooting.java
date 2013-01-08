@@ -135,7 +135,7 @@ public class ContShooting extends Activity {
         mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
         mText = (TextView)findViewById(R.id.text1);
-    	mText.setText(/*mNum + System.getProperty("line.separator") + */"0");
+    	mText.setText(/*mNum + System.getProperty("line.separator") + */"0" + " ");
 
     	//òAé ñáêîê›íË
         String num = ContShootingPreference.getCurrentShootNum(this);
@@ -499,7 +499,7 @@ public class ContShooting extends Activity {
     }
     
     public void count(){
-    	mText.setText(/*mNum + System.getProperty("line.separator") + */Integer.toString(++mCount));
+    	mText.setText(/*mNum + System.getProperty("line.separator") + */Integer.toString(++mCount) + " ");
     }
     
     public void displayStart(){
