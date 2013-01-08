@@ -2,7 +2,6 @@
 <resources>
     <string name="app_name">cont. shootin\'</string>
     <string name="sc_hidden">Hidden mode now</string>
-    <string name="sc_number">num</string>
     <string name="sc_menu_gallery">gallery</string>
     <string name="sc_menu_gallery_ng">Coundn\'t launch gallery.</string>
     <string name="sc_menu_setting">settings</string>
@@ -51,7 +50,8 @@
 	<string name="interval_summary">Set shooting interval</string>
 	<string name="interval_not_set">No setting</string>
     <string name="str_sec">sec.</string>
-    
+
+    <string name="display_hide">display_hide</string>
    	<string name="display_hide_title">Hidden mode launch</string>
 	<string name="display_hide_summary">Set hidden mode when launching app</string>
 	
@@ -62,4 +62,8 @@
 	<string name="hidden_size_big">big</string>
 	<string name="hidden_size_small">small</string>
 	<string name="hidden_size_none">none</string>
+
+	<string name="display_sleep">display_sleep</string>
+	<string name="display_sleep_title">Sleep setting</string>
+	<string name="display_sleep_summary">Keep display on when launching app</string>
 </resources>
