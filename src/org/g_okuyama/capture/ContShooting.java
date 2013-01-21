@@ -543,6 +543,9 @@ public class ContShooting extends Activity {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             mSleepFlag = false;
     	}
+    	
+        //アプリのキャッシュ削除
+    	deleteCache(getCacheDir());
     }
     
     protected void onResume(){
@@ -609,7 +612,7 @@ public class ContShooting extends Activity {
 		*/
 
         //アプリのキャッシュ削除
-        deleteCache(getCacheDir());
+        //deleteCache(getCacheDir());
         
 		System.exit(RESULT_OK);
     }
