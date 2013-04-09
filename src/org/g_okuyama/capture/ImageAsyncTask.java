@@ -53,7 +53,7 @@ public class ImageAsyncTask extends AsyncTask<Bitmap, Void, Bitmap> {
         */
         
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        bmp[0].compress(Bitmap.CompressFormat.JPEG, 100, out);
+        bmp[0].compress(Bitmap.CompressFormat.PNG, 100, out);
 
         savedata(out.toByteArray());
         bmp[0].recycle();

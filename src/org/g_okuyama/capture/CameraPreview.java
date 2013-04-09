@@ -271,6 +271,8 @@ class CameraPreview implements SurfaceHolder.Callback {
         //focus
         mFocus = new AutoFocusCallback(){
             public void onAutoFocus(boolean success, Camera camera) {
+                //フォーカスエフェクトを消す
+                ((ContShooting)mContext).clearCanvas();
                 mPreviewCallback = new PreviewCallback(CameraPreview.this);
             }
         };
@@ -283,15 +285,6 @@ class CameraPreview implements SurfaceHolder.Callback {
     
     private void setAllParameters(){
         Camera.Parameters param = mCamera.getParameters();
-        
-        /*
-        param.setColorEffect(mEffect);            
-        param.setSceneMode(mScene);
-        param.setWhiteBalance(mWhite);
-        mSize = mSupportList.get(mOffset + mPicIdx);        
-        param.setPreviewSize(mSize.width, mSize.height);
-        mCamera.setParameters(param);
-        */
 
         //一度に複数のパラメータを設定すると落ちる端末があるため、1つずつ設定する
         try{

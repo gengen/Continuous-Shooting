@@ -12,8 +12,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.hardware.Camera;
+import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -21,7 +20,6 @@ import android.provider.MediaStore.Images.Media;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SurfaceHolder;
@@ -33,7 +31,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -61,6 +58,8 @@ public class ContShooting extends Activity {
     static final int RESPONSE_HIDDEN_SIZE = 7;
     
     SurfaceHolder mHolder;
+    SurfaceView mSurface;
+    Canvas mCanvas;
     private int mCount = 0;
     private TextView mText;
     private CameraPreview mPreview = null;
@@ -68,6 +67,8 @@ public class ContShooting extends Activity {
     public int mMode = 0;
     private boolean mMaskFlag = false;
     private boolean mSleepFlag = false;
+    
+    private OverlayView mOverlay;
     
     private ImageButton mButton = null;
     private ImageButton mMaskButton = null;
@@ -115,8 +116,8 @@ public class ContShooting extends Activity {
         mHeight = disp.getHeight();
         
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        SurfaceView sv = (SurfaceView)findViewById(R.id.camera);
-        mHolder = sv.getHolder();
+        mSurface = (SurfaceView)findViewById(R.id.camera);
+        mHolder = mSurface.getHolder();
         
         //画面下方にあるViewの高さを取得
         LinearLayout bottom = (LinearLayout)findViewById(R.id.bottom_view);
@@ -162,14 +163,15 @@ public class ContShooting extends Activity {
 						mPreview.resumeShooting();
 						mMode = 1;
                         //フォーカスボタンを見えなくする
-                        mFocusButton.setVisibility(View.INVISIBLE);
+						//for 2.7 撮影中でもフォーカスできるようにする
+                        //mFocusButton.setVisibility(View.INVISIBLE);
                         mMaskButton.setVisibility(View.INVISIBLE);
 					}
 					else{
 						mPreview.stopShooting();
 						mMode = 0;
                         //フォーカスボタンを見えるようにする
-                        mFocusButton.setVisibility(View.VISIBLE);
+                        //mFocusButton.setVisibility(View.VISIBLE);
                         mMaskButton.setVisibility(View.VISIBLE);
 					}
 				}
@@ -193,6 +195,10 @@ public class ContShooting extends Activity {
         mFocusButton = (ImageButton)findViewById(R.id.focusbtn);
         mFocusButton.setOnClickListener(new OnClickListener(){
 			public void onClick(View v) {
+			    if(mOverlay != null){
+			        mOverlay.displayFocus();
+			    }
+			    
 				if(mPreview != null){
 						mPreview.doAutoFocus();
 				}
@@ -202,34 +208,17 @@ public class ContShooting extends Activity {
         if(ContShootingPreference.isHidden(this)){
             setToHidden();
         }
-        
-        //adstir設定 ->onResumeに移動
-        /*
-        LinearLayout layout = (LinearLayout)findViewById(R.id.adspace);
-        mAdstirView = new AdstirView(this, "74792bcf", 1);
-        layout.addView(mAdstirView);
-        */
-		/*
-        ImageButton plus = (ImageButton)findViewById(R.id.plus);
-        plus.setOnClickListener(new OnClickListener(){
-			@Override
-			public void onClick(View v) {
-				if(mPreview != null){
-					mPreview.setZoom(true);
-				}
-			}
-        });
-        
-        ImageButton minus = (ImageButton)findViewById(R.id.minus);
-        minus.setOnClickListener(new OnClickListener(){
-			@Override
-			public void onClick(View v) {
-				if(mPreview != null){
-					mPreview.setZoom(false);
-				}
-			}
-        });
-        */
+
+        //描画用Viewを追加
+        mOverlay = new OverlayView(mPreview, this);
+        FrameLayout frame = (FrameLayout)findViewById(R.id.camera_parent);
+        frame.addView(mOverlay, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+    }
+    
+    void clearCanvas(){
+        if(mOverlay != null){
+            mOverlay.clearCanvas();
+        }
     }
     
     public void setToNormal(){
@@ -545,7 +534,7 @@ public class ContShooting extends Activity {
     	}
     	
         //アプリのキャッシュ削除
-    	deleteCache(getCacheDir());
+        deleteCache(getCacheDir());    	
     }
     
     protected void onResume(){
