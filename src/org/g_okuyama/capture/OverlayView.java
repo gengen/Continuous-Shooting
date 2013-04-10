@@ -41,7 +41,7 @@ public class OverlayView extends View {
         
         //フォーカス中に表示するアイコン
         Resources r = getResources();
-        mFocus = BitmapFactory.decodeResource(r, R.drawable.focus);
+        mFocus = BitmapFactory.decodeResource(r, R.drawable.focus_prev);
         mWidth = mFocus.getWidth();
         mHeight = mFocus.getHeight();
 
