@@ -218,17 +218,6 @@ class CameraPreview implements SurfaceHolder.Callback {
 
         //止めないでsetParameters()するとエラーとなる場合があるため止める
         mCamera.stopPreview();
-
-        /*
-        //if(mFocusFlag){
-        	mFocus = new AutoFocusCallback(){
-        		public void onAutoFocus(boolean success, Camera camera) {
-        			//mCamera.setOneShotPreviewCallback(mPreviewCallback);
-        			mCamera.setPreviewCallback(mPreviewCallback);
-        		}
-        	};
-        //}
-        */
         
         //設定画面で設定したとき
         if(mSetValue != null){
@@ -273,13 +262,19 @@ class CameraPreview implements SurfaceHolder.Callback {
             public void onAutoFocus(boolean success, Camera camera) {
                 //フォーカスエフェクトを消す
                 ((ContShooting)mContext).clearCanvas();
-                mPreviewCallback = new PreviewCallback(CameraPreview.this);
+                if(mPreviewCallback == null){
+                    mPreviewCallback = new PreviewCallback(CameraPreview.this);
+                }
             }
         };
+
+        ((ContShooting)mContext).displayFocus();
         try{
             mCamera.autoFocus(mFocus);
         }catch(Exception e){
-            mPreviewCallback = new PreviewCallback(CameraPreview.this);            
+            if(mPreviewCallback == null){
+                mPreviewCallback = new PreviewCallback(CameraPreview.this);
+            }
         }
     }
     
@@ -345,11 +340,13 @@ class CameraPreview implements SurfaceHolder.Callback {
 
     void doAutoFocus(){
     	if(mCamera != null && mFocus != null){
-            mCamera.setPreviewCallback(null);
+            //mCamera.setPreviewCallback(null);
     		try{
     			mCamera.autoFocus(mFocus);
     		}catch(Exception e){
-    			mPreviewCallback = new PreviewCallback(CameraPreview.this);            
+                if(mPreviewCallback == null){
+                    mPreviewCallback = new PreviewCallback(CameraPreview.this);
+                }
     		}
     	}
     }

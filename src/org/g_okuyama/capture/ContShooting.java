@@ -195,12 +195,10 @@ public class ContShooting extends Activity {
         mFocusButton = (ImageButton)findViewById(R.id.focusbtn);
         mFocusButton.setOnClickListener(new OnClickListener(){
 			public void onClick(View v) {
-			    if(mOverlay != null){
-			        mOverlay.displayFocus();
-			    }
+			    displayFocus();
 			    
 				if(mPreview != null){
-						mPreview.doAutoFocus();
+				    mPreview.doAutoFocus();
 				}
 			}
         });
@@ -218,6 +216,12 @@ public class ContShooting extends Activity {
     void clearCanvas(){
         if(mOverlay != null){
             mOverlay.clearCanvas();
+        }
+    }
+    
+    void displayFocus(){
+        if(mOverlay != null){
+            mOverlay.displayFocus();
         }
     }
     
