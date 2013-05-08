@@ -33,7 +33,7 @@ public class ImageAsyncTask extends AsyncTask<Bitmap, Void, Bitmap> {
 
     @Override
     protected Bitmap doInBackground(Bitmap... bmp) {
-    	//Bitmap retBmp;
+    	Bitmap retBmp;
         
         final int width = mSize.width;
         final int height = mSize.height;            
@@ -42,24 +42,24 @@ public class ImageAsyncTask extends AsyncTask<Bitmap, Void, Bitmap> {
         bmp[0].setPixels(rgb, 0, width, 0, 0, width, height);
         rgb = null;
         
-        /*
         //‰ñ“]
         Matrix matrix = new Matrix();
         // ‰ñ“]‚³‚¹‚éŠp“x‚ðŽw’è
-        matrix.postRotate(90.0f);   
+        int degree = ((ContShooting)mContext).getDegree();
+        //matrix.postRotate(90.0f);
+        matrix.postRotate(degree);
         retBmp = Bitmap.createBitmap(bmp[0], 0, 0, bmp[0].getWidth(), bmp[0].getHeight(), matrix, true);
         bmp[0].recycle();
         bmp[0] = null;
-        */
         
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        bmp[0].compress(Bitmap.CompressFormat.JPEG, 100, out);
+        retBmp.compress(Bitmap.CompressFormat.JPEG, 100, out);
 
         savedata(out.toByteArray());
-        bmp[0].recycle();
-        bmp[0] = null;
+        retBmp.recycle();
+        retBmp = null;
 
-        return bmp[0];
+        return retBmp;
     }
 
     @Override

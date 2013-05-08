@@ -91,8 +91,11 @@ class CameraPreview implements SurfaceHolder.Callback {
         mWhite = white;
         //mPicIdx = size;
         mSizeStr = size;
-        mWidth = width;
-        mHeight = height;
+        //mWidth = width;
+        //mHeight = height;
+        //portraitÇ…Ç∑ÇÈÇΩÇﬂÅAwidthÇ∆heightÇãtÇ…Ç∑ÇÈ
+        mWidth = height;
+        mHeight = width;
 	}
     
     public void surfaceCreated(SurfaceHolder holder) {
@@ -139,6 +142,8 @@ class CameraPreview implements SurfaceHolder.Callback {
                 }
                 return;
     	    }
+    	    
+            mCamera.setDisplayOrientation(90);
     	}
     	
     	if(mSupportList == null){

@@ -12,7 +12,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Canvas;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -22,6 +24,7 @@ import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.OrientationEventListener;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -29,6 +32,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.animation.RotateAnimation;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
@@ -76,13 +80,14 @@ public class ContShooting extends Activity {
     //private String mNum = null;
     private ContentResolver mResolver;
     
+    OrientationEventListener mOrientationListener;
+    int mDegree = 0;
+    int mPrevTarget = 0;
+    
     private WebView mWebView = null;
     //全体の画面サイズ
     int mWidth = 0;
     int mHeight = 0;
-    //プレビュー枠のサイズ
-    int mPrevWidth = 0;
-    int mPrevHeight = 0;
     
     int mHiddenSizeIdx = 0;
     
@@ -97,6 +102,33 @@ public class ContShooting extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         
         setContentView(R.layout.main);
+        
+        mOrientationListener = new OrientationEventListener(this, SensorManager.SENSOR_DELAY_UI) {
+            @Override
+            public void onOrientationChanged(int orientation) {
+                int degree = 0;
+                if ( orientation > 0 && orientation <= 45) {
+                    degree = 0;
+                } else
+                if ( orientation > 45 && orientation <= 135) {
+                    degree = 90;
+                } else
+                if ( orientation > 135 && orientation <= 225) {
+                    degree = 180;
+                } else
+                if ( orientation > 225 && orientation <= 315) {
+                    degree = 270;
+                } else { 
+                    degree = 0;
+                }
+                if (mDegree != degree) {
+                    mDegree = degree;
+                }
+                //向きに応じてボタン等を回転させる
+                rotate(degree);
+            }
+        };
+        mOrientationListener.enable();
         
         /*mNum = getString(R.string.sc_number);*/
         mResolver = getContentResolver();
@@ -118,17 +150,6 @@ public class ContShooting extends Activity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         mSurface = (SurfaceView)findViewById(R.id.camera);
         mHolder = mSurface.getHolder();
-        
-        //画面下方にあるViewの高さを取得
-        LinearLayout bottom = (LinearLayout)findViewById(R.id.bottom_view);
-        int margin = bottom.getHeight();
-
-        //初期画面表示(全体の高さの3/4をプレビューサイズの初期値とする)
-        FrameLayout frame = (FrameLayout)findViewById(R.id.camera_parent);
-        //int margin = mHeight / 4;
-        mPrevHeight = mHeight - margin;
-        mPrevWidth = (mPrevHeight / 3) * 4;
-        frame.setLayoutParams(new FrameLayout.LayoutParams(mPrevWidth, mPrevHeight, Gravity.CENTER_HORIZONTAL));
 
         mPreview = new CameraPreview(this);
         mPreview.setField(effect, scene, white, size, mWidth, mHeight);
@@ -152,6 +173,38 @@ public class ContShooting extends Activity {
 
         //register UI Listener
     	setListener();        
+    }
+    
+    private void rotate(int degree){
+        ImageButton[] btns = {mButton, mMaskButton, mFocusButton};
+        
+        int target = 0;
+        if(degree == 0){
+            target = 90;
+        }
+        else if(degree == 90){
+            target = 0;
+        }
+        else if(degree == 180){
+            target = 270;
+        }
+        else if(degree == 270){
+            target = 180;
+        }
+        
+        for(ImageButton btn : btns){
+            RotateAnimation rotate = new RotateAnimation(mPrevTarget, target, btn.getWidth()/2, btn.getHeight()/2);
+            //rotate.setDuration(1500);
+            rotate.setFillAfter(true);
+            btn.startAnimation(rotate);
+        }
+        
+        RotateAnimation rotate = new RotateAnimation(mPrevTarget, target, mText.getWidth()/2, mText.getHeight()/2);
+        //rotate.setDuration(3000);
+        rotate.setFillAfter(true);
+        mText.startAnimation(rotate);        
+        
+        mPrevTarget = target;
     }
     
     private void setListener(){
@@ -252,12 +305,10 @@ public class ContShooting extends Activity {
         mWebView = null;
 
         FrameLayout frame = (FrameLayout)findViewById(R.id.camera_parent);
-        /*
         frame.setLayoutParams(new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.FILL_PARENT,
                 FrameLayout.LayoutParams.WRAP_CONTENT));
-                */
-        frame.setLayoutParams(new FrameLayout.LayoutParams(mPrevWidth, mPrevHeight, Gravity.CENTER_HORIZONTAL));
+        //frame.setLayoutParams(new FrameLayout.LayoutParams(mPrevWidth, mPrevHeight, Gravity.CENTER_HORIZONTAL));
 
         displayNormalMode();
         mMaskFlag = false;
@@ -293,12 +344,12 @@ public class ContShooting extends Activity {
     	 * 隠しモードのプレビューサイズ設定
     	 * 大=1/4, 小=1/6, 無し=1*1
     	 */
-    	int denom = 6;
-        if(mHiddenSizeIdx == 1){
-            denom = 4;
+        int denom = 4;
+        if(mHiddenSizeIdx == 2){
+            denom = 6;
         }
-        int hide_height = mHeight / denom;
-        int hide_width = hide_height / 3 * 4;
+        int hide_width = mWidth / denom;
+        int hide_height = hide_width / 3 * 4;
 
         if(mHiddenSizeIdx == 3){
             hide_height = 1;
@@ -537,6 +588,10 @@ public class ContShooting extends Activity {
     
     public boolean isMask(){
         return mMaskFlag;
+    }
+    
+    public int getDegree(){
+        return mDegree;
     }
     
     protected void onPause(){
