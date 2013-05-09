@@ -55,25 +55,24 @@
 	        android:orientation="horizontal"
 	        >
     
-	   	<ImageButton
-	       	android:id="@+id/mask_imgbtn"
-    	   	android:src="@drawable/scale_down"
-       		android:layout_height="50sp"
-		    android:layout_width="50sp"
-	   		android:background="@null"
-	   		android:scaleType="fitXY"
-	   	>
-       	</ImageButton>
+		   	<ImageButton
+		       	android:id="@+id/mask_imgbtn"
+    		   	android:src="@drawable/scale_down"
+       			android:layout_height="50sp"
+			    android:layout_width="50sp"
+		   		android:background="@null"
+	   			android:scaleType="fitXY"
+	   		>
+       		</ImageButton>
        
-       	<ImageButton 
-			android:id="@+id/focusbtn"
-           	android:src="@drawable/focus"
-           	android:background="@null"
-	       	android:layout_height="50sp"
-    	   	android:layout_width="50sp"
-    	   	android:scaleType="fitXY"
+	       	<ImageButton 
+				android:id="@+id/focusbtn"
+        	   	android:src="@drawable/focus"
+           		android:background="@null"
+		       	android:layout_height="50sp"
+    		   	android:layout_width="50sp"
+    		   	android:scaleType="fitXY"
 		    />
-       	
        	</LinearLayout>
        
 	   	<ImageButton
@@ -94,7 +93,7 @@
        		android:layout_gravity="right"
        		android:gravity="center_vertical"
        		android:background="#00000000"
-       		android:text="1" 
+       		android:text="" 
        	>
        	</TextView>
 	</FrameLayout>

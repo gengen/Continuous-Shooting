@@ -71,6 +71,8 @@ public class ContShooting extends Activity {
     public int mMode = 0;
     private boolean mMaskFlag = false;
     private boolean mSleepFlag = false;
+    //回転中か否か
+    private boolean mProcessFlag = false;
     
     private OverlayView mOverlay;
     
@@ -123,9 +125,9 @@ public class ContShooting extends Activity {
                 }
                 if (mDegree != degree) {
                     mDegree = degree;
+                    //向きに応じてボタン等を回転させる
+                    rotate(degree);
                 }
-                //向きに応じてボタン等を回転させる
-                rotate(degree);
             }
         };
         mOrientationListener.enable();
@@ -186,7 +188,7 @@ public class ContShooting extends Activity {
             target = 0;
         }
         else if(degree == 180){
-            target = 270;
+            target = -90;
         }
         else if(degree == 270){
             target = 180;
@@ -194,15 +196,28 @@ public class ContShooting extends Activity {
         
         for(ImageButton btn : btns){
             RotateAnimation rotate = new RotateAnimation(mPrevTarget, target, btn.getWidth()/2, btn.getHeight()/2);
-            //rotate.setDuration(1500);
+            rotate.setDuration(500);
             rotate.setFillAfter(true);
             btn.startAnimation(rotate);
         }
         
         RotateAnimation rotate = new RotateAnimation(mPrevTarget, target, mText.getWidth()/2, mText.getHeight()/2);
-        //rotate.setDuration(3000);
+        rotate.setDuration(500);
         rotate.setFillAfter(true);
-        mText.startAnimation(rotate);        
+        mText.startAnimation(rotate); 
+        
+        //回転時、表示がズレるので、断念
+        /*
+        if(mWebView != null){
+            int x = mWebView.getWidth()/2;
+            int y = mWebView.getHeight()/2;
+            Log.d(TAG, "x,y = " + x + "," + y);
+            RotateAnimation rotateWeb = new RotateAnimation(mPrevTarget, target, 100, 100);
+            rotateWeb.setDuration(0);
+            rotateWeb.setFillAfter(true);
+            mWebView.startAnimation(rotate);
+        }
+        */
         
         mPrevTarget = target;
     }
@@ -218,6 +233,9 @@ public class ContShooting extends Activity {
                         //フォーカスボタンを見えなくする
 						//for 2.7 撮影中でもフォーカスできるようにする
                         //mFocusButton.setVisibility(View.INVISIBLE);
+
+						//アニメーションをクリアしてからでないとvisibilityが操作できないためクリア
+                        mMaskButton.clearAnimation();
                         mMaskButton.setVisibility(View.INVISIBLE);
 					}
 					else{
@@ -225,7 +243,18 @@ public class ContShooting extends Activity {
 						mMode = 0;
                         //フォーカスボタンを見えるようにする
                         //mFocusButton.setVisibility(View.VISIBLE);
+                        mMaskButton.clearAnimation();
                         mMaskButton.setVisibility(View.VISIBLE);
+                        if(mDegree != 90){
+                            RotateAnimation rotate = new RotateAnimation(
+                                    90, 
+                                    mPrevTarget, 
+                                    mMaskButton.getWidth()/2, 
+                                    mMaskButton.getHeight()/2);
+                            rotate.setDuration(0);
+                            rotate.setFillAfter(true);
+                            mMaskButton.startAnimation(rotate);
+                        }
 					}
 				}
 			}
@@ -285,12 +314,24 @@ public class ContShooting extends Activity {
     void enableMask(){
         //隠しモードボタンを表示する(撮影時以下)
         if(mMode == 0){
+            mMaskButton.clearAnimation();
             mMaskButton.setVisibility(View.VISIBLE);
+            if(mDegree != 90){
+                RotateAnimation rotate = new RotateAnimation(
+                        90, 
+                        mPrevTarget, 
+                        mMaskButton.getWidth()/2, 
+                        mMaskButton.getHeight()/2);
+                rotate.setDuration(0);
+                rotate.setFillAfter(true);
+                mMaskButton.startAnimation(rotate);
+            }
         }        
     }
     
     void disableMask(){
         //隠しモードボタンを見えなくする
+        mMaskButton.clearAnimation();
         mMaskButton.setVisibility(View.INVISIBLE);
     }
     
@@ -649,6 +690,8 @@ public class ContShooting extends Activity {
     	if(mPreview != null){
     	    mPreview.release();
     	}
+    	
+        mOrientationListener.disable();
     }
     
     protected void onRestart(){
