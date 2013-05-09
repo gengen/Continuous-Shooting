@@ -71,8 +71,6 @@ public class ContShooting extends Activity {
     public int mMode = 0;
     private boolean mMaskFlag = false;
     private boolean mSleepFlag = false;
-    //‰ñ“]’†‚©”Û‚©
-    private boolean mProcessFlag = false;
     
     private OverlayView mOverlay;
     
@@ -195,6 +193,9 @@ public class ContShooting extends Activity {
         }
         
         for(ImageButton btn : btns){
+            if(btn.equals(mMaskButton) && mMode == 1){
+                continue;
+            }
             RotateAnimation rotate = new RotateAnimation(mPrevTarget, target, btn.getWidth()/2, btn.getHeight()/2);
             rotate.setDuration(500);
             rotate.setFillAfter(true);
