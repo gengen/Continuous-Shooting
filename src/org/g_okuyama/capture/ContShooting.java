@@ -121,6 +121,7 @@ public class ContShooting extends Activity {
                 } else { 
                     degree = 0;
                 }
+                
                 if (mDegree != degree) {
                     mDegree = degree;
                     //Œü‚«‚É‰ž‚¶‚Äƒ{ƒ^ƒ““™‚ð‰ñ“]‚³‚¹‚é
@@ -179,19 +180,20 @@ public class ContShooting extends Activity {
         ImageButton[] btns = {mButton, mMaskButton, mFocusButton};
         
         int target = 0;
+        //TODO:for tablet
         if(degree == 0){
-            target = 90;
-        }
-        else if(degree == 90){
             target = 0;
         }
-        else if(degree == 180){
+        else if(degree == 90){
             target = -90;
         }
-        else if(degree == 270){
+        else if(degree == 180){
             target = 180;
         }
-        
+        else if(degree == 270){
+            target = 90;
+        }
+
         for(ImageButton btn : btns){
             if(btn.equals(mMaskButton) && mMode == 1){
                 continue;
@@ -246,9 +248,10 @@ public class ContShooting extends Activity {
                         //mFocusButton.setVisibility(View.VISIBLE);
                         mMaskButton.clearAnimation();
                         mMaskButton.setVisibility(View.VISIBLE);
-                        if(mDegree != 90){
+                        //TODO:for tablet
+                        if(mDegree != 0){
                             RotateAnimation rotate = new RotateAnimation(
-                                    90, 
+                                    0, 
                                     mPrevTarget, 
                                     mMaskButton.getWidth()/2, 
                                     mMaskButton.getHeight()/2);
@@ -317,9 +320,10 @@ public class ContShooting extends Activity {
         if(mMode == 0){
             mMaskButton.clearAnimation();
             mMaskButton.setVisibility(View.VISIBLE);
-            if(mDegree != 90){
+            //TODO:for tablet
+            if(mDegree != 0){
                 RotateAnimation rotate = new RotateAnimation(
-                        90, 
+                        0, 
                         mPrevTarget, 
                         mMaskButton.getWidth()/2, 
                         mMaskButton.getHeight()/2);
