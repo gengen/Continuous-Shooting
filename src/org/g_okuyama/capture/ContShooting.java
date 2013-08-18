@@ -71,6 +71,7 @@ public class ContShooting extends Activity {
     public int mMode = 0;
     private boolean mMaskFlag = false;
     private boolean mSleepFlag = false;
+    private boolean mAutoFlag = false;
     
     private OverlayView mOverlay;
     
@@ -173,7 +174,11 @@ public class ContShooting extends Activity {
         }
 
         //register UI Listener
-    	setListener();        
+    	setListener();
+    	
+    	if(ContShootingPreference.isAutoShoot(this)){
+    		mAutoFlag = true;
+    	}
     }
     
     private void rotate(int degree){
@@ -231,34 +236,10 @@ public class ContShooting extends Activity {
 			public void onClick(View v) {
 				if(mPreview != null){
 					if(mMode == 0){
-						mPreview.resumeShooting();
-						mMode = 1;
-                        //フォーカスボタンを見えなくする
-						//for 2.7 撮影中でもフォーカスできるようにする
-                        //mFocusButton.setVisibility(View.INVISIBLE);
-
-						//アニメーションをクリアしてからでないとvisibilityが操作できないためクリア
-                        mMaskButton.clearAnimation();
-                        mMaskButton.setVisibility(View.INVISIBLE);
+						start();
 					}
 					else{
-						mPreview.stopShooting();
-						mMode = 0;
-                        //フォーカスボタンを見えるようにする
-                        //mFocusButton.setVisibility(View.VISIBLE);
-                        mMaskButton.clearAnimation();
-                        mMaskButton.setVisibility(View.VISIBLE);
-                        //TODO:for tablet
-                        if(mDegree != 0){
-                            RotateAnimation rotate = new RotateAnimation(
-                                    0, 
-                                    mPrevTarget, 
-                                    mMaskButton.getWidth()/2, 
-                                    mMaskButton.getHeight()/2);
-                            rotate.setDuration(0);
-                            rotate.setFillAfter(true);
-                            mMaskButton.startAnimation(rotate);
-                        }
+						stop();
 					}
 				}
 			}
@@ -297,6 +278,38 @@ public class ContShooting extends Activity {
         mOverlay = new OverlayView(mPreview, this);
         FrameLayout frame = (FrameLayout)findViewById(R.id.camera_parent);
         frame.addView(mOverlay, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+    }
+    
+    void start(){
+		mPreview.resumeShooting();
+		mMode = 1;
+        //フォーカスボタンを見えなくする
+		//for 2.7 撮影中でもフォーカスできるようにする
+        //mFocusButton.setVisibility(View.INVISIBLE);
+
+		//アニメーションをクリアしてからでないとvisibilityが操作できないためクリア
+        mMaskButton.clearAnimation();
+        mMaskButton.setVisibility(View.INVISIBLE);
+    }
+    
+    void stop(){
+		mPreview.stopShooting();
+		mMode = 0;
+        //フォーカスボタンを見えるようにする
+        //mFocusButton.setVisibility(View.VISIBLE);
+        mMaskButton.clearAnimation();
+        mMaskButton.setVisibility(View.VISIBLE);
+        //TODO:for tablet
+        if(mDegree != 0){
+            RotateAnimation rotate = new RotateAnimation(
+                    0, 
+                    mPrevTarget, 
+                    mMaskButton.getWidth()/2, 
+                    mMaskButton.getHeight()/2);
+            rotate.setDuration(0);
+            rotate.setFillAfter(true);
+            mMaskButton.startAnimation(rotate);
+        }    	
     }
     
     void clearCanvas(){
@@ -640,14 +653,17 @@ public class ContShooting extends Activity {
         return mDegree;
     }
     
+    void shootIfAuto(){
+    	//初回起動時かつ自動連写設定のときに連写
+    	if(mAutoFlag){
+    		start();
+    		mAutoFlag = false;
+    	}
+    }
+    
     protected void onPause(){
         //Log.d(TAG, "enter ContShooting#onPause");    	
     	super.onPause();
-    	/*
-    	if(mAdstirView != null){
-    	    mAdstirView.stop();
-    	}
-    	*/
     	
     	if(mSleepFlag){
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -660,14 +676,6 @@ public class ContShooting extends Activity {
     
     protected void onResume(){
         super.onResume();
-        
-        //adstir設定
-        /*
-        LinearLayout layout = (LinearLayout)findViewById(R.id.adspace);
-        mAdstirView = new AdstirView(this, "74792bcf", 1);
-        layout.addView(mAdstirView);
-        mAdstirView.start();
-        */
 
         //adstir設定→onCreateからonResumeに移動
         mAdstirView = new AdstirView(this, "74792bcf", 1);

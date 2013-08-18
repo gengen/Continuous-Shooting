@@ -32,6 +32,12 @@
 			>
 		</ListPreference>
 
+    	<CheckBoxPreference 
+        	android:key="@string/auto_shoot"
+            android:title="@string/auto_shoot_title"
+        	android:summary="@string/auto_shoot_summary"
+        	>
+        </CheckBoxPreference>
    	</PreferenceCategory>
   
       <PreferenceCategory android:title="@string/category_effect">

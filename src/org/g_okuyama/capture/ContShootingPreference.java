@@ -189,9 +189,14 @@ public class ContShootingPreference extends PreferenceActivity implements OnPref
                 .getString("interval", /*default*/DEFAULT_INTERVAL);
     }
     
+    public static boolean isAutoShoot(Context c){
+    	return PreferenceManager.getDefaultSharedPreferences(c)
+    			.getBoolean("auto_shoot", false);
+    }
+    
     public static boolean isHidden(Context c){
         return PreferenceManager.getDefaultSharedPreferences(c)
-                .getBoolean("display_hide", false);
+        		.getBoolean("display_hide", false);
     }
 
     public static String getCurrentHiddenSize(Context c){
