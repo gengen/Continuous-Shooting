@@ -12,7 +12,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.hardware.SensorManager;
 import android.net.Uri;
@@ -37,12 +36,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.ad_stir.AdstirView;
-import com.ad_stir.AdstirTerminate;
 
 public class ContShooting extends Activity {
     private static final String TAG = "ContShooting";
@@ -91,8 +86,6 @@ public class ContShooting extends Activity {
     int mHeight = 0;
     
     int mHiddenSizeIdx = 0;
-    
-    private AdstirView mAdstirView = null;
     
     /** Called when the activity is first created. */
     @Override
@@ -277,7 +270,7 @@ public class ContShooting extends Activity {
         //ï`âÊópViewÇí«â¡
         mOverlay = new OverlayView(mPreview, this);
         FrameLayout frame = (FrameLayout)findViewById(R.id.camera_parent);
-        frame.addView(mOverlay, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+        frame.addView(mOverlay, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
     }
     
     void start(){
@@ -357,7 +350,7 @@ public class ContShooting extends Activity {
         FrameLayout layout = (FrameLayout)findViewById(R.id.linear);
         layout.removeView(mWebView);
         layout.setLayoutParams(new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.FILL_PARENT, 
+                FrameLayout.LayoutParams.MATCH_PARENT, 
                 FrameLayout.LayoutParams.WRAP_CONTENT));
         mWebView.setWebViewClient(null);
         mWebView.destroy();
@@ -365,7 +358,7 @@ public class ContShooting extends Activity {
 
         FrameLayout frame = (FrameLayout)findViewById(R.id.camera_parent);
         frame.setLayoutParams(new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.FILL_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.WRAP_CONTENT));
         //frame.setLayoutParams(new FrameLayout.LayoutParams(mPrevWidth, mPrevHeight, Gravity.CENTER_HORIZONTAL));
 
@@ -382,7 +375,7 @@ public class ContShooting extends Activity {
         mWebView.getSettings().setAppCacheEnabled(false);
         FrameLayout layout = (FrameLayout)findViewById(R.id.linear);
         layout.setLayoutParams(new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.FILL_PARENT, 
+                FrameLayout.LayoutParams.MATCH_PARENT, 
                 FrameLayout.LayoutParams.WRAP_CONTENT, 
                 1));
         layout.addView(mWebView);
@@ -677,11 +670,6 @@ public class ContShooting extends Activity {
     protected void onResume(){
         super.onResume();
 
-        //adstirê›íËÅ®onCreateÇ©ÇÁonResumeÇ…à⁄ìÆ
-        mAdstirView = new AdstirView(this, "74792bcf", 1);
-        LinearLayout layout = (LinearLayout)findViewById(R.id.adspace);
-        layout.addView(mAdstirView);
-        
         if(ContShootingPreference.isSleepMode(this)){
             if(!mSleepFlag){
                 getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -699,7 +687,7 @@ public class ContShooting extends Activity {
     protected void onDestroy(){
         //Log.d(TAG, "enter ContShooting#onDestroy");
     	super.onDestroy();
-    	AdstirTerminate.init(this);
+
     	if(mPreview != null){
     	    mPreview.release();
     	}

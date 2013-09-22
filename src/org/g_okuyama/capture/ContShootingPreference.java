@@ -27,7 +27,8 @@ public class ContShootingPreference extends PreferenceActivity implements OnPref
     static final int HIDDEN_SIZE = 7;
     static String[] sSizeList = null;
     
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.addPreferencesFromResource(R.xml.preference);
