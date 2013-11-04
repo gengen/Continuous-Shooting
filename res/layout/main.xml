@@ -5,12 +5,16 @@
    android:layout_height="fill_parent"
    >
 
-<com.ad_stir.webview.AdstirWebView  
-  media="MEDIA-e6dc95a"
-  spot="1"
-  refresh_interval="20"
-  android:layout_width="fill_parent"
-  android:layout_height="wrap_content" />
+<FrameLayout 
+      android:layout_width="match_parent"
+      android:layout_height="50sp">
+	<com.ad_stir.webview.AdstirWebView  
+  		media="MEDIA-e6dc95a"
+  		spot="1"
+  		refresh_interval="20"
+  		android:layout_width="fill_parent"
+  		android:layout_height="wrap_content" />
+</FrameLayout>
 
 <FrameLayout 
     android:id="@+id/parent"
