@@ -36,8 +36,11 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 
 public class ContShooting extends Activity {
     private static final String TAG = "ContShooting";
@@ -73,6 +76,8 @@ public class ContShooting extends Activity {
     private ImageButton mButton = null;
     private ImageButton mMaskButton = null;
     private ImageButton mFocusButton = null;
+    private SeekBar mSeekBar = null;
+    
     //private String mNum = null;
     private ContentResolver mResolver;
     
@@ -266,6 +271,36 @@ public class ContShooting extends Activity {
         if(ContShootingPreference.isHidden(this)){
             setToHidden();
         }
+        
+        //seekbar
+        mSeekBar = (SeekBar)findViewById(R.id.ev_seek);
+        /*
+        int inc = mSeekBar.getKeyProgressIncrement();
+        Log.d(TAG, "increment = " + inc);
+        mSeekBar.setKeyProgressIncrement(50);
+        inc = mSeekBar.getKeyProgressIncrement();
+        Log.d(TAG, "increment = " + inc);
+        */
+        mSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener(){
+
+            public void onProgressChanged(SeekBar bar, int progress, boolean fromuser) {
+            	//10の倍数でないときは何もしない
+            	if(!(progress % 10 == 0)){
+            		return;
+            	}
+            	
+				if(mPreview != null){
+	                mPreview.setExposureValue(progress);
+				}
+            }
+
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+            
+        });
 
         //描画用Viewを追加
         mOverlay = new OverlayView(mPreview, this);
@@ -283,6 +318,11 @@ public class ContShooting extends Activity {
 		//アニメーションをクリアしてからでないとvisibilityが操作できないためクリア
         mMaskButton.clearAnimation();
         mMaskButton.setVisibility(View.INVISIBLE);
+        
+        if(mPreview.isEVSupported()){
+        	FrameLayout ev = (FrameLayout)findViewById(R.id.exposure_layout);
+        	ev.setVisibility(View.INVISIBLE);
+        }
     }
     
     void stop(){
@@ -302,7 +342,12 @@ public class ContShooting extends Activity {
             rotate.setDuration(0);
             rotate.setFillAfter(true);
             mMaskButton.startAnimation(rotate);
-        }    	
+        }
+        
+        if(mPreview.isEVSupported()){
+        	FrameLayout ev = (FrameLayout)findViewById(R.id.exposure_layout);
+        	ev.setVisibility(View.VISIBLE);
+        }
     }
     
     void clearCanvas(){
@@ -628,6 +673,11 @@ public class ContShooting extends Activity {
     
     void displayNormalMode(){
         mMaskButton.setImageResource(R.drawable.scale_down);
+    }
+    
+    void invisibleExposureView(){
+        FrameLayout ev = (FrameLayout)findViewById(R.id.exposure_layout);
+        ev.setVisibility(View.INVISIBLE);
     }
     
     public void saveGallery(ContentValues values){

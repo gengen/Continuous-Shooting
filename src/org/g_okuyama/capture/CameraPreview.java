@@ -16,6 +16,7 @@ package org.g_okuyama.capture;
  * limitations under the License.
  */
 
+import android.R.integer;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -80,6 +81,11 @@ class CameraPreview implements SurfaceHolder.Callback {
 	//画面サイズ
 	int mWidth = 0;
 	int mHeight = 0;
+	
+	//露出補正
+	int mEVMax = 0;
+	int mEVMin = 0;
+	boolean mEVFlag = false; 
 		
     CameraPreview(Context context){
         mContext = context;
@@ -157,6 +163,19 @@ class CameraPreview implements SurfaceHolder.Callback {
             mCamera.release();
             mCamera = null;
         }
+    	
+        //露出補正をサポートしていない場合はViewを見えなくする
+        Camera.Parameters param = mCamera.getParameters();
+    	mEVMax = param.getMaxExposureCompensation();
+    	mEVMin = param.getMinExposureCompensation();
+    	if((mEVMax == 0) && (mEVMin == 0)){
+			if(mContext != null){
+				((ContShooting)mContext).invisibleExposureView();
+			}		
+    	}
+    	else{
+    		mEVFlag = true;
+    	}
     }
     
     private void createSupportList(){
@@ -454,6 +473,32 @@ class CameraPreview implements SurfaceHolder.Callback {
     
     void setInterval(int interval){
         mInterval = interval;
+    }
+    
+    void setExposureValue(int progress){
+    	int index = progress - 50;
+
+    	Log.d(TAG, "index = " + index);
+    	Camera.Parameters param = mCamera.getParameters();
+    	//float step = param.getExposureCompensationStep();
+    	//Log.d(TAG, "step = " + step);
+    	int max = param.getMaxExposureCompensation();
+    	int min = param.getMinExposureCompensation();
+    	Log.d(TAG, "max = " + max + ", min = " + min);
+    	int value = 0;
+    	if(index > 0){
+    		value = index * max / 50;
+    	}
+    	else if(index < 0){
+    		value = -1 * index * min / 50;
+    	}
+    	Log.d(TAG, "value = " + value);
+    	param.setExposureCompensation(value);
+    	mCamera.setParameters(param);
+    }
+    
+    public boolean isEVSupported(){
+    	return mEVFlag;
     }
     
     void countShoot(){
