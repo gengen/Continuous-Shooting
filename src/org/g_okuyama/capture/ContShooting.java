@@ -76,7 +76,7 @@ public class ContShooting extends Activity {
     private ImageButton mButton = null;
     private ImageButton mMaskButton = null;
     private ImageButton mFocusButton = null;
-    private SeekBar mSeekBar = null;
+    private SeekBar mEVSeekBar = null;
     
     //private String mNum = null;
     private ContentResolver mResolver;
@@ -273,7 +273,7 @@ public class ContShooting extends Activity {
         }
         
         //seekbar
-        mSeekBar = (SeekBar)findViewById(R.id.ev_seek);
+        mEVSeekBar = (SeekBar)findViewById(R.id.ev_seek);
         /*
         int inc = mSeekBar.getKeyProgressIncrement();
         Log.d(TAG, "increment = " + inc);
@@ -281,13 +281,14 @@ public class ContShooting extends Activity {
         inc = mSeekBar.getKeyProgressIncrement();
         Log.d(TAG, "increment = " + inc);
         */
-        mSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener(){
+        mEVSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener(){
 
             public void onProgressChanged(SeekBar bar, int progress, boolean fromuser) {
             	//10の倍数でないときは何もしない
-            	if(!(progress % 10 == 0)){
-            		return;
-            	}
+            	//if(!(progress % 10 == 0)){
+            	//return;
+            	//}
+            	//->連続ではなく別の場所をタップしたときに照度変更ができなかったため削除
             	
 				if(mPreview != null){
 	                mPreview.setExposureValue(progress);

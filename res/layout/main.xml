@@ -47,7 +47,7 @@
        
        	<FrameLayout 
 	       android:id="@+id/exposure_layout"
-    	   android:layout_width="250sp"
+    	   android:layout_width="170sp"
 	       android:layout_height="wrap_content"
     	   android:layout_gravity="center_horizontal|bottom"
 			android:paddingBottom="10sp"
