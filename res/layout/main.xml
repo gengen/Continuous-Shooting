@@ -59,9 +59,10 @@
        		>
 		       	<ImageView
        				android:id="@+id/ev_minus"		       	    
-		       	    android:layout_width="wrap_content"
-	    	   	    android:layout_height="wrap_content"
+		       	    android:layout_width="16sp"
+	    	   	    android:layout_height="16sp"
 	       	    	android:src="@drawable/ev_minus"
+	       	    	android:paddingRight="5sp"
 				/>
 	       		<SeekBar
        				android:id="@+id/ev_seek"
@@ -74,9 +75,10 @@
 				/>
            		<ImageView
        				android:id="@+id/ev_plus"		       	    
-	       	    	android:layout_width="wrap_content"
-	       	    	android:layout_height="wrap_content"
+	       	    	android:layout_width="16sp"
+	       	    	android:layout_height="16sp"
 	       	    	android:src="@drawable/ev_plus"
+	       	    	android:paddingLeft="5sp"
 				/>
 	       　　</LinearLayout>
        </FrameLayout>
