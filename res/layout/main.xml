@@ -42,7 +42,7 @@
    	</FrameLayout>
        
    	<FrameLayout 
-	    android:id="@+id/exposure_layout"
+	    android:id="@+id/settings_layout"
     	android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
     	android:layout_gravity="center_horizontal|bottom"
@@ -52,6 +52,7 @@
        		android:layout_height="fill_parent"
        		android:orientation="horizontal">
        		<LinearLayout
+       		    android:id="@+id/zoom_layout"
        			android:layout_width="0pt"
        		    android:layout_height="fill_parent"
        		    android:layout_weight="1"
@@ -80,6 +81,7 @@
 	       	    	android:paddingLeft="5sp"/>
        　　		</LinearLayout>
        		<LinearLayout
+	   		    android:id="@+id/ev_layout"
        		    android:layout_width="0pt"
        		    android:layout_height="fill_parent"
        		    android:layout_weight="1"

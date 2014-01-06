@@ -76,7 +76,14 @@ public class ContShooting extends Activity {
     private ImageButton mButton = null;
     private ImageButton mMaskButton = null;
     private ImageButton mFocusButton = null;
+    
     private SeekBar mEVSeekBar = null;
+    private ImageView mEVOut = null;
+    private ImageView mEVIn = null;
+
+    private SeekBar mZoomSeekBar = null;
+    private ImageView mZoomOut = null;
+    private ImageView mZoomIn = null;
     
     //private String mNum = null;
     private ContentResolver mResolver;
@@ -210,20 +217,16 @@ public class ContShooting extends Activity {
         RotateAnimation rotate = new RotateAnimation(mPrevTarget, target, mText.getWidth()/2, mText.getHeight()/2);
         rotate.setDuration(500);
         rotate.setFillAfter(true);
-        mText.startAnimation(rotate); 
+        mText.startAnimation(rotate);
         
-        //âÒì]éûÅAï\é¶Ç™ÉYÉåÇÈÇÃÇ≈ÅAífîO
-        /*
-        if(mWebView != null){
-            int x = mWebView.getWidth()/2;
-            int y = mWebView.getHeight()/2;
-            Log.d(TAG, "x,y = " + x + "," + y);
-            RotateAnimation rotateWeb = new RotateAnimation(mPrevTarget, target, 100, 100);
-            rotateWeb.setDuration(0);
-            rotateWeb.setFillAfter(true);
-            mWebView.startAnimation(rotate);
+        ImageView[] imgs = {mZoomIn, mZoomOut, mEVIn, mEVOut};
+        
+        for(ImageView img: imgs){
+            RotateAnimation rotateimg = new RotateAnimation(mPrevTarget, target, img.getWidth()/2, img.getHeight()/2);
+            rotate.setDuration(500);
+            rotate.setFillAfter(true);
+            img.startAnimation(rotate);
         }
-        */
         
         mPrevTarget = target;
     }
@@ -272,7 +275,7 @@ public class ContShooting extends Activity {
             setToHidden();
         }
         
-        //seekbar
+        //seekbar for EV
         mEVSeekBar = (SeekBar)findViewById(R.id.ev_seek);
         /*
         int inc = mSeekBar.getKeyProgressIncrement();
@@ -302,6 +305,31 @@ public class ContShooting extends Activity {
             }
             
         });
+        
+        mEVIn = (ImageView)findViewById(R.id.ev_in);
+        mEVOut = (ImageView)findViewById(R.id.ev_out);
+        
+        //seekbar for zoom
+        mZoomSeekBar = (SeekBar)findViewById(R.id.zoom_seek);
+        mZoomSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener(){
+
+            public void onProgressChanged(SeekBar bar, int progress, boolean fromuser) {
+                //Log.d(TAG, "progress = " + progress);
+				if(mPreview != null){
+	                mPreview.setZoom(progress);
+				}
+            }
+
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+            
+        });
+        
+        mZoomIn = (ImageView)findViewById(R.id.zoom_in);
+        mZoomOut = (ImageView)findViewById(R.id.zoom_out);
 
         //ï`âÊópViewÇí«â¡
         mOverlay = new OverlayView(mPreview, this);
@@ -320,8 +348,8 @@ public class ContShooting extends Activity {
         mMaskButton.clearAnimation();
         mMaskButton.setVisibility(View.INVISIBLE);
         
-        if(mPreview.isEVSupported()){
-        	FrameLayout ev = (FrameLayout)findViewById(R.id.exposure_layout);
+        if(mPreview.isEVSupported() || mPreview.isZoomSupported()){
+        	FrameLayout ev = (FrameLayout)findViewById(R.id.settings_layout);
         	ev.setVisibility(View.INVISIBLE);
         }
     }
@@ -345,8 +373,8 @@ public class ContShooting extends Activity {
             mMaskButton.startAnimation(rotate);
         }
         
-        if(mPreview.isEVSupported()){
-        	FrameLayout ev = (FrameLayout)findViewById(R.id.exposure_layout);
+        if(mPreview.isEVSupported() || mPreview.isZoomSupported()){
+        	FrameLayout ev = (FrameLayout)findViewById(R.id.settings_layout);
         	ev.setVisibility(View.VISIBLE);
         }
     }
@@ -676,8 +704,13 @@ public class ContShooting extends Activity {
         mMaskButton.setImageResource(R.drawable.scale_down);
     }
     
+    void invisibleZoom(){
+        FrameLayout zoom = (FrameLayout)findViewById(R.id.zoom_layout);
+        zoom.setVisibility(View.INVISIBLE);
+    }
+    
     void invisibleExposureView(){
-        FrameLayout ev = (FrameLayout)findViewById(R.id.exposure_layout);
+        FrameLayout ev = (FrameLayout)findViewById(R.id.ev_layout);
         ev.setVisibility(View.INVISIBLE);
     }
     

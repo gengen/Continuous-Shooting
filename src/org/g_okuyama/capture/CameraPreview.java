@@ -75,6 +75,16 @@ class CameraPreview implements SurfaceHolder.Callback {
 	//現在の撮影数
 	private int mNum = 0;
 	
+	//ズームサポート
+	boolean mZoom = false;
+	//スムースズームサポート
+	boolean mSmoothZoom = false;
+	//最大ズーム
+	private int mZoomMax = 0;
+	//ズーム状態
+	boolean mZoomStopped = true;
+	private int mZoomIdx = 0;
+	
 	//連写間隔
 	private int mInterval = 0;
 	
@@ -163,6 +173,42 @@ class CameraPreview implements SurfaceHolder.Callback {
             mCamera.release();
             mCamera = null;
         }
+    	
+        //ズームをサポートしていない場合はViewを見えなくする
+        Camera.Parameters params = mCamera.getParameters();
+		if(params.isSmoothZoomSupported()){
+			//Log.d(TAG, "this terminal supports smooth zoom.");
+			mSmoothZoom = true;
+			mCamera.setZoomChangeListener(new Camera.OnZoomChangeListener(){
+                public void onZoomChange(int zoomValue, boolean stopped, Camera camera) {
+                    //Log.d(TAG, "onZoomChange: value = " + zoomValue + " stopped = " + stopped);
+                    mZoomStopped = stopped;
+                    
+                    if((zoomValue != mZoomIdx) && stopped){
+                        //指定したズーム処理が追いついていない場合(すばやくスライドさせた場合など)
+                        if(mCamera != null){
+                            //Log.d(TAG, "onZoomChange->stopped");
+                            try{
+                                mCamera.startSmoothZoom(mZoomIdx);
+                            }catch(Exception e){
+                                //何もしない
+                            }
+                        }
+                    }
+                }
+            });
+		}
+		else{
+			if(params.isZoomSupported()){
+				//Log.d(TAG, "this terminal supports zoom.");
+				mZoom = true;
+			}
+			else{
+				if(mContext != null){
+					((ContShooting)mContext).invisibleZoom();
+				}				
+			}
+		}
     	
         //露出補正をサポートしていない場合はViewを見えなくする
         Camera.Parameters param = mCamera.getParameters();
@@ -308,6 +354,13 @@ class CameraPreview implements SurfaceHolder.Callback {
     
     private void setAllParameters(){
         Camera.Parameters param = mCamera.getParameters();
+        
+        //ズームサポートしているがmax_zoomが0の場合は見えなくする
+        if(mZoom || mSmoothZoom){
+            if(param.getMaxZoom() == 0){
+                ((ContShooting)mContext).invisibleZoom();
+            }
+        }
 
         //一度に複数のパラメータを設定すると落ちる端末があるため、1つずつ設定する
         try{
@@ -379,46 +432,45 @@ class CameraPreview implements SurfaceHolder.Callback {
     	}
     }
     
-    public void setZoom(boolean flag){
-    	/*
+    public boolean isZoomSupported(){
+        if(mSmoothZoom || mZoom){
+            Camera.Parameters param = mCamera.getParameters();
+            if(param.getMaxZoom() != 0){
+                return true;
+            }
+    	}
+    	return false;
+    }
+    
+    public void setZoom(int progress){
     	if(mCamera == null){
     		return;
     	}
+
+		Camera.Parameters params = mCamera.getParameters();
+    	if(mZoomMax == 0){
+    		mZoomMax = params.getMaxZoom();
+    		//Log.d(TAG, "zoom max = " + mZoomMax);
+    	}
     	
-        Camera.Parameters params = mCamera.getParameters();
-
-        //if(params.isSmoothZoomSupported() == false){
-        //Log.d(TAG, "Zoom is not supported");
-        //	return;
-        //}
-        
-        List ZoomRatislist = params.getZoomRatios ();
-        for (int i=0;i < ZoomRatislist.size();i++) {
-        	Log.d("camera", "list " + i + " = " + ZoomRatislist.get(i));
-        }
-
+		mZoomIdx = mZoomMax * progress / 100;
+		//Log.d(TAG, "value = " + mZoomIdx);
     	
-        int cur = params.getZoom();
-        int max = params.getMaxZoom();
-
-        Log.d(TAG, "currentZoom: " + cur);
-        Log.d(TAG, "maxZoom: " + max);
-        
-        if(flag){
-        	if(cur < max){
-        		//mCamera.startSmoothZoom(++cur);
-        		params.setZoom(++cur);
-        		mCamera.setParameters(params);
-        	}
-        }
-        else{
-        	if(cur > 0){
-        		//mCamera.startSmoothZoom(--cur);
-        		params.setZoom(--cur);
-        		mCamera.setParameters(params);
-        	}
-        }
-        */
+    	if(mSmoothZoom){
+    		try{
+    		    if(mZoomStopped){
+    		        mCamera.startSmoothZoom(mZoomIdx);
+    		    }
+    		}catch(Exception e){
+    			//何もしない
+    		}
+    	}
+    	else if(mZoom){
+    		//mCamera.stopPreview();
+    		params.setZoom(mZoomIdx);
+    		mCamera.setParameters(params);
+    		//mCamera.startPreview();
+    	}
     }
     
     List<String> getEffectList(){
