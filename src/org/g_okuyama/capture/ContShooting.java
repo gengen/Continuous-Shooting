@@ -12,9 +12,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.hardware.SensorManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore.Images.Media;
@@ -190,18 +193,17 @@ public class ContShooting extends Activity {
         ImageButton[] btns = {mButton, mMaskButton, mFocusButton};
         
         int target = 0;
-        //TODO:for tablet
         if(degree == 0){
-            target = 0;
+        	target = isPhone() ? 0 : 90;
         }
         else if(degree == 90){
-            target = -90;
+        	target = isPhone() ? -90 : 0;
         }
         else if(degree == 180){
-            target = 180;
+        	target = isPhone() ? 180 : -90;
         }
         else if(degree == 270){
-            target = 90;
+        	target = isPhone() ? 90 : 180;
         }
 
         for(ImageButton btn : btns){
@@ -214,18 +216,18 @@ public class ContShooting extends Activity {
             btn.startAnimation(rotate);
         }
         
-        RotateAnimation rotate = new RotateAnimation(mPrevTarget, target, mText.getWidth()/2, mText.getHeight()/2);
-        rotate.setDuration(500);
-        rotate.setFillAfter(true);
-        mText.startAnimation(rotate);
+        RotateAnimation rotatetxt = new RotateAnimation(mPrevTarget, target, mText.getWidth()/2, mText.getHeight()/2);
+        rotatetxt.setDuration(500);
+        rotatetxt.setFillAfter(true);
+        mText.startAnimation(rotatetxt);
         
         ImageView[] imgs = {mZoomIn, mZoomOut, mEVIn, mEVOut};
         
         for(ImageView img: imgs){
             RotateAnimation rotateimg = new RotateAnimation(mPrevTarget, target, img.getWidth()/2, img.getHeight()/2);
-            rotate.setDuration(500);
-            rotate.setFillAfter(true);
-            img.startAnimation(rotate);
+            rotateimg.setDuration(500);
+            rotateimg.setFillAfter(true);
+            img.startAnimation(rotateimg);
         }
         
         mPrevTarget = target;
@@ -361,7 +363,6 @@ public class ContShooting extends Activity {
         //mFocusButton.setVisibility(View.VISIBLE);
         mMaskButton.clearAnimation();
         mMaskButton.setVisibility(View.VISIBLE);
-        //TODO:for tablet
         if(mDegree != 0){
             RotateAnimation rotate = new RotateAnimation(
                     0, 
@@ -400,7 +401,6 @@ public class ContShooting extends Activity {
         if(mMode == 0){
             mMaskButton.clearAnimation();
             mMaskButton.setVisibility(View.VISIBLE);
-            //TODO:for tablet
             if(mDegree != 0){
                 RotateAnimation rotate = new RotateAnimation(
                         0, 
@@ -724,6 +724,25 @@ public class ContShooting extends Activity {
     
     public boolean isMask(){
         return mMaskFlag;
+    }
+    
+    private boolean isPhone(){
+    	Context context = getApplicationContext();
+    	Resources r = context.getResources();
+    	Configuration configuration = r.getConfiguration();
+    	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB_MR2) {
+    		if ((configuration.screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK)
+    				< Configuration.SCREENLAYOUT_SIZE_LARGE) {
+    			return true;
+    		}
+
+    	} else {
+    		if (configuration.smallestScreenWidthDp < 600) {
+    			return true;
+    		}
+    	}
+    	
+    	return false;
     }
     
     public int getDegree(){
