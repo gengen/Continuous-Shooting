@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.List;
 import java.util.Locale;
 
+import com.ad_stir.interstitial.AdstirInterstitial.AdstirInterstitialDialogListener;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
@@ -102,6 +104,9 @@ public class ContShooting extends Activity {
     
     int mHiddenSizeIdx = 0;
     
+    //ad
+    com.ad_stir.interstitial.AdstirInterstitial mInterstitial;
+    
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -187,6 +192,9 @@ public class ContShooting extends Activity {
     	if(ContShootingPreference.isAutoShoot(this)){
     		mAutoFlag = true;
     	}
+    	
+    	mInterstitial = new com.ad_stir.interstitial.AdstirInterstitial("MEDIA-e6dc95a",2);
+    	mInterstitial.load();
     }
     
     private void rotate(int degree){
@@ -760,14 +768,14 @@ public class ContShooting extends Activity {
     protected void onPause(){
         //Log.d(TAG, "enter ContShooting#onPause");    	
     	super.onPause();
-    	
+    
     	if(mSleepFlag){
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             mSleepFlag = false;
     	}
     	
         //アプリのキャッシュ削除
-        deleteCache(getCacheDir());    	
+        deleteCache(getCacheDir());
     }
     
     protected void onResume(){
@@ -803,30 +811,41 @@ public class ContShooting extends Activity {
     	super.onRestart();
     }
     
-    public void finish(){
-        //Log.d(TAG, "enter ContShooting#finish");
-    	/*
-    	new AlertDialog.Builder(this)
-    	.setTitle(R.string.pi_finish)
-    	.setMessage(getString(R.string.pi_finish_confirm))
-    	.setPositiveButton(R.string.pi_ok, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				System.exit(RESULT_OK);
+    @Override
+    public void onBackPressed(){
+    	//インタースティシャル広告表示(OKでアプリ終了)
+    	//mInterstitial.showInterstitial(this);
+    	mInterstitial.setDialogText(getString(R.string.sc_finish_title));
+    	mInterstitial.setPositiveButtonText(getString(R.string.sc_finish_ok));
+    	mInterstitial.setNegativeButtonText(getString(R.string.sc_finish_cancel));
+    	mInterstitial.setDialoglistener(new AdstirInterstitialDialogListener(){
+			@Override
+			public void onCancel() {
 			}
-		})
-		.setNegativeButton(R.string.pi_ng, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
+
+			@Override
+			public void onNegativeButtonClick() {
 				return;
 			}
-		})
-		.show();
-		*/
+
+			@Override
+			public void onPositiveButtonClick() {
+				finish();
+			}
+    	});
+    	mInterstitial.showDialog(this);
+    }
+    
+    //delete since ver4.0
+    /*
+    public void finish(){
 
         //アプリのキャッシュ削除
         //deleteCache(getCacheDir());
-        
+    	
 		System.exit(RESULT_OK);
     }
+     */
     
     public static boolean deleteCache(File dir) {
         if(dir==null) {

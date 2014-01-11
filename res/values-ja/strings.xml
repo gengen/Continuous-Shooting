@@ -13,7 +13,11 @@
     <string name="sc_error_title">エラー</string>
     <string name="sc_error_cam">カメラが起動できません</string>
     <string name="sc_error_cam_ok">確認（アプリ終了）</string>
-
+    
+    <string name="sc_finish_title">アプリを終了しますか？</string>
+    <string name="sc_finish_ok">OK</string>
+    <string name="sc_finish_cancel">Cancel</string>
+    
     <string name="category_shooting">連写設定</string>
 	<string name="category_effect">エフェクト設定</string>
     <string name="category_display">画面設定</string>
