@@ -42,6 +42,7 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -287,13 +288,6 @@ public class ContShooting extends Activity {
         
         //seekbar for EV
         mEVSeekBar = (SeekBar)findViewById(R.id.ev_seek);
-        /*
-        int inc = mSeekBar.getKeyProgressIncrement();
-        Log.d(TAG, "increment = " + inc);
-        mSeekBar.setKeyProgressIncrement(50);
-        inc = mSeekBar.getKeyProgressIncrement();
-        Log.d(TAG, "increment = " + inc);
-        */
         mEVSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener(){
 
             public void onProgressChanged(SeekBar bar, int progress, boolean fromuser) {
@@ -324,7 +318,6 @@ public class ContShooting extends Activity {
         mZoomSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener(){
 
             public void onProgressChanged(SeekBar bar, int progress, boolean fromuser) {
-                //Log.d(TAG, "progress = " + progress);
 				if(mPreview != null){
 	                mPreview.setZoom(progress);
 				}
@@ -713,12 +706,12 @@ public class ContShooting extends Activity {
     }
     
     void invisibleZoom(){
-        FrameLayout zoom = (FrameLayout)findViewById(R.id.zoom_layout);
+        LinearLayout zoom = (LinearLayout)findViewById(R.id.zoom_layout);
         zoom.setVisibility(View.INVISIBLE);
     }
     
     void invisibleExposureView(){
-        FrameLayout ev = (FrameLayout)findViewById(R.id.ev_layout);
+        LinearLayout ev = (LinearLayout)findViewById(R.id.ev_layout);
         ev.setVisibility(View.INVISIBLE);
     }
     
