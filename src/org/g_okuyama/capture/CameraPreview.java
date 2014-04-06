@@ -21,6 +21,7 @@ import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnKeyListener;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
@@ -30,6 +31,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore.Images;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.SurfaceHolder;
 
 import java.io.ByteArrayOutputStream;
@@ -122,41 +124,13 @@ class CameraPreview implements SurfaceHolder.Callback {
                 mCamera = Camera.open();
     	        
     	    }catch(RuntimeException e){
-    	        new AlertDialog.Builder(mContext)
-    	        .setTitle(R.string.sc_error_title)
-    	        .setMessage(mContext.getString(R.string.sc_error_cam))
-    	        .setPositiveButton(R.string.sc_error_cam_ok, new DialogInterface.OnClickListener() {
-    	            public void onClick(DialogInterface dialog, int which) {
-    	                System.exit(0);
-    	            }
-    	        })
-    	        .show();
-    	            
-    	        try {
-    	            this.finalize();
-    	        } catch (Throwable t) {
-    	            System.exit(0);                 
-    	        }
+    	    	displayAlertDialog();
     	        return;
     	    }
     	    
     	    if(mCamera == null){
-                new AlertDialog.Builder(mContext)
-                .setTitle(R.string.sc_error_title)
-                .setMessage(mContext.getString(R.string.sc_error_cam))
-                .setPositiveButton(R.string.sc_error_cam_ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        System.exit(0);
-                    }
-                })
-                .show();
-                    
-                try {
-                    this.finalize();
-                } catch (Throwable t) {
-                    System.exit(0);                 
-                }
-                return;
+    	    	displayAlertDialog();
+    	        return;
     	    }
     	    
             mCamera.setDisplayOrientation(90);
@@ -222,6 +196,39 @@ class CameraPreview implements SurfaceHolder.Callback {
     	else{
     		mEVFlag = true;
     	}
+    }
+    
+    private void displayAlertDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setTitle(R.string.sc_error_title)
+        	.setMessage(mContext.getString(R.string.sc_error_cam))
+        	.setPositiveButton(R.string.sc_error_cam_ok, new DialogInterface.OnClickListener() {
+        		public void onClick(DialogInterface dialog, int which) {
+        			((ContShooting)mContext).finish();
+        		}
+        	});
+        builder.setOnKeyListener(new OnKeyListener() {
+        	@Override
+        	public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+        		//バックキーと検索キーを無効化
+        		switch (keyCode) {
+        		case KeyEvent.KEYCODE_BACK:
+        		case KeyEvent.KEYCODE_SEARCH:
+        			return true;
+        		default:
+        			return false;
+        		}
+        	}
+        });
+        AlertDialog dialog = builder.show();
+        //ダイアログ画面外を押された際に閉じないように設定
+        dialog.setCanceledOnTouchOutside(false);    
+        
+        try {
+            this.finalize();
+        } catch (Throwable t) {
+            ((ContShooting)mContext).finish();
+        }
     }
     
     private void createSupportList(){
@@ -530,6 +537,9 @@ class CameraPreview implements SurfaceHolder.Callback {
     void setExposureValue(int progress){
     	int index = progress - 50;
 
+    	if(mCamera == null){
+    		return;
+    	}
     	//Log.d(TAG, "index = " + index);
     	Camera.Parameters param = mCamera.getParameters();
     	//float step = param.getExposureCompensationStep();
