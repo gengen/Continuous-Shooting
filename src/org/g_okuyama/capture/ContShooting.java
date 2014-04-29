@@ -4,7 +4,8 @@ import java.io.File;
 import java.util.List;
 import java.util.Locale;
 
-import com.ad_stir.interstitial.AdstirInterstitial.AdstirInterstitialDialogListener;
+import jp.beyond.sdk.Bead;
+import jp.beyond.sdk.Bead.ContentsOrientation;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -106,9 +107,9 @@ public class ContShooting extends Activity {
     int mHeight = 0;
     
     int mHiddenSizeIdx = 0;
-    
-    //ad
-    com.ad_stir.interstitial.AdstirInterstitial mInterstitial;
+
+    //BEAD ad
+    private Bead mBeadExit = null;
     
     /** Called when the activity is first created. */
     @Override
@@ -196,8 +197,14 @@ public class ContShooting extends Activity {
     		mAutoFlag = true;
     	}
     	
+    	/*
     	mInterstitial = new com.ad_stir.interstitial.AdstirInterstitial("MEDIA-e6dc95a",2);
     	mInterstitial.load();
+    	*/
+    	
+        //BEAD ad
+        mBeadExit = Bead. createExitInstance("df90e2a0ddfc86519f43c05794b1b3aeb75bba5135e54c62", ContentsOrientation.Auto);
+        mBeadExit.requestAd(this);		
     }
     
     private void rotate(int degree){
@@ -805,6 +812,11 @@ public class ContShooting extends Activity {
     	    mPreview.release();
     	}
     	
+    	// 広告終了
+    	if(mBeadExit != null){
+    		mBeadExit.endAd();
+    	}
+    	
         mOrientationListener.disable();
     }
     
@@ -815,27 +827,8 @@ public class ContShooting extends Activity {
     
     @Override
     public void onBackPressed(){
-    	//インタースティシャル広告表示(OKでアプリ終了)
-    	//mInterstitial.showInterstitial(this);
-    	mInterstitial.setDialogText(getString(R.string.sc_finish_title));
-    	mInterstitial.setPositiveButtonText(getString(R.string.sc_finish_ok));
-    	mInterstitial.setNegativeButtonText(getString(R.string.sc_finish_cancel));
-    	mInterstitial.setDialoglistener(new AdstirInterstitialDialogListener(){
-			@Override
-			public void onCancel() {
-			}
-
-			@Override
-			public void onNegativeButtonClick() {
-				return;
-			}
-
-			@Override
-			public void onPositiveButtonClick() {
-				finish();
-			}
-    	});
-    	mInterstitial.showDialog(this);
+    	// 広告ダイアログ表示
+    	mBeadExit.showAd(this);
     }
     
     public static boolean deleteCache(File dir) {
